@@ -1,0 +1,69 @@
+# 3. The credit system
+
+RIPE Atlas runs on **credits** (not on an hourly quota). You earn them by contributing to the network, and spend them by running your own measurements.
+
+## How you earn credits
+
+| Path | Cost | Credits earned | Relevant for us? |
+|---|---|---|---|
+| Host 1 probe | €0 (~€40 hardware if bought) | ~21,600 / day | ✅ The normal way |
+| RIPE NCC member (LIR) | €2,800 first year, then €1,800/year | 1,000,000 / month | ❌ Disproportionate |
+| RIPE Atlas sponsor | Variable financial contribution | Depends on number of sponsored probes | ❌ Not suitable |
+| Transfer from another user | €0 | Variable | ⚠️ If UC3M already has a credited account |
+| Existing public data | €0 | — (no credits needed) | ✅ To exploit existing data |
+
+**The detail that matters**: a host receives **15 credits per minute** their probe is connected, i.e. **~21,600 credits / 24h** per probe, as long as it stays connected. Accounts are credited once per day. On top of that, a small bonus of **1 credit per delivered measurement result** — but that's marginal, the bulk comes simply from staying connected. **You don't need anyone else to use your probe to earn credits.**
+
+### On the "RIPE NCC member" path
+
+Documented for the record, but beside the point here. Becoming a member (LIR) costs **€1,000 sign-up + €1,800/year**, and serves to manage Internet resources (IP blocks, AS numbers) — it's for ISPs and large structures. A single hosted probe already yields ~650,000 credits/month for free, in the same ballpark as a member's monthly million, for €0. This path would only make sense if UC3M needed the LIR status for entirely different reasons.
+
+> To check with the supervisors: does UC3M **already** have a RIPE Atlas account with credits? That would settle the question.
+
+## How you spend credits
+
+Each measurement has a **cost per result** that depends on its type. Official unit costs:
+
+| Measurement | Cost per result |
+|---|---|
+| Ping (3 packets, default) | **3** credits |
+| DNS (UDP) | **10** credits |
+| DNS (TCP) | **20** credits |
+| Traceroute (default) | **30** credits |
+| SSLCert | **10** credits |
+
+Important rules:
+- the cost depends on the **number of results delivered**, not on frequency or number of probes. A measurement from 1 probe every minute costs the same as from 10 probes every 10 minutes (same total number of results);
+- a **one-off** measurement costs **2× more** than a periodic measurement result, due to scheduling overhead;
+- billing happens in batches, every 4 to 6 hours.
+
+### Orders of magnitude for our topic
+
+With ~21,600 credits/day from a single probe:
+
+| Type | Cost/result | Possible results / day |
+|---|---|---|
+| Ping | 3 | ~7,200 |
+| DNS (UDP) | 10 | ~2,160 |
+| DNS (TCP) | 20 | ~1,080 |
+| Traceroute | 30 | ~720 |
+
+**Concrete example.** Testing 1,000 IPs with a single ping: 1,000 × 3 = **3,000 credits** (easy). But repeating that test every 5 min for a 3h match: 1,000 × 36 × 3 = **108,000 credits**, i.e. ~5 days of a single probe's income. → You'll need to **either limit** the frequency/number of IPs, **or accumulate** credits over several days before a match, **or use multiple probes / a better-funded account**.
+
+> Official RIPE example for comparison: a traceroute from 5 probes, 2×/h, for 48h = 480 results = 14,400 credits (30 × 480).
+
+## If you run out of credits
+
+- RIPE periodically computes your consumption rate.
+- If fewer than **5 days** of credits remain at the current rate → warning email.
+- If the balance goes negative → the most expensive measurement is **stopped automatically**. You keep access to results already obtained, but must **recreate** the measurement once credits are replenished.
+
+## Can you measure without credits?
+
+- **Running your own measurements (UDM)**: no, credits are required.
+- **Using already-existing measurements**: yes, for free and without even an account (see [page 4](04-existing-data.md)).
+
+## Sources
+
+- *Credits* (official docs, all figures above) — <https://atlas.ripe.net/docs/getting-started/credits/>
+- *Billing, Payment and Fees* (2026 LIR fees) — <https://www.ripe.net/membership/payment/>

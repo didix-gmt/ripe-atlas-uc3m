@@ -1,24 +1,18 @@
 # 3. The credit system
 
-RIPE Atlas runs on **credits** (not on an hourly quota). You earn them by contributing to the network, and spend them by running your own measurements.
+RIPE Atlas runs on **credits**. You earn them by contributing to the network, and spend them by running your own measurements.
 
 ## How you earn credits
 
 | Path | Cost | Credits earned | Relevant for us? |
 |---|---|---|---|
-| Host 1 probe | €0 (~€40 hardware if bought) | ~21,600 / day | ✅ The normal way |
-| RIPE NCC member (LIR) | €2,800 first year, then €1,800/year | 1,000,000 / month | ❌ Disproportionate |
-| RIPE Atlas sponsor | Variable financial contribution | Depends on number of sponsored probes | ❌ Not suitable |
-| Transfer from another user | €0 | Variable | ⚠️ If UC3M already has a credited account |
-| Existing public data | €0 | — (no credits needed) | ✅ To exploit existing data |
+| Host 1 hardware probe | €0 - mailed for free by the RIPE NCC | ~21,600 / day | No |
+| Host 1 software probe | €0 - but you need your own device | ~21,600 / day | Yes - our case, Pi already provided by the lab |
+| RIPE NCC member (LIR) | €2,800 first year, then €1,800/year | 1,000,000 / month | No, disproportionate |
+| Transfer from another user | €0 | Variable | If UC3M already has a credited account |
+| Existing public data | €0 | - (no credits needed) | Yes to exploit existing data |
 
-**The detail that matters**: a host receives **15 credits per minute** their probe is connected, i.e. **~21,600 credits / 24h** per probe, as long as it stays connected. Accounts are credited once per day. On top of that, a small bonus of **1 credit per delivered measurement result** — but that's marginal, the bulk comes simply from staying connected. **You don't need anyone else to use your probe to earn credits.**
-
-### On the "RIPE NCC member" path
-
-Documented for the record, but beside the point here. Becoming a member (LIR) costs **€1,000 sign-up + €1,800/year**, and serves to manage Internet resources (IP blocks, AS numbers) — it's for ISPs and large structures. A single hosted probe already yields ~650,000 credits/month for free, in the same ballpark as a member's monthly million, for €0. This path would only make sense if UC3M needed the LIR status for entirely different reasons.
-
-> To check with the supervisors: does UC3M **already** have a RIPE Atlas account with credits? That would settle the question.
+**The detail that matters**: a host receives **15 credits per minute** their probe is connected, i.e. **~21,600 credits / 24h** per probe, as long as it stays connected. Accounts are credited once per day. On top of that, a small bonus of **1 credit per delivered measurement result** - but that's marginal, the bulk comes simply from staying connected. **You don't need anyone else to use your probe to earn credits.**
 
 ## How you spend credits
 
@@ -48,9 +42,7 @@ With ~21,600 credits/day from a single probe:
 | DNS (TCP) | 20 | ~1,080 |
 | Traceroute | 30 | ~720 |
 
-**Concrete example.** Testing 1,000 IPs with a single ping: 1,000 × 3 = **3,000 credits** (easy). But repeating that test every 5 min for a 3h match: 1,000 × 36 × 3 = **108,000 credits**, i.e. ~5 days of a single probe's income. → You'll need to **either limit** the frequency/number of IPs, **or accumulate** credits over several days before a match, **or use multiple probes / a better-funded account**.
-
-> Official RIPE example for comparison: a traceroute from 5 probes, 2×/h, for 48h = 480 results = 14,400 credits (30 × 480).
+**Concrete example.** Testing 1,000 IPs with a single ping: 1,000 × 3 = **3,000 credits** (easy). But repeating that test every 5 min for a 3h match: 1,000 × 36 × 3 = **108,000 credits**, i.e. ~5 days of a single probe's income. → You'll need to **either limit** the frequency/number of IPs, **or accumulate** credits over several days before a match, **or use multiple probes.
 
 ## If you run out of credits
 
@@ -65,5 +57,5 @@ With ~21,600 credits/day from a single probe:
 
 ## Sources
 
-- *Credits* (official docs, all figures above) — <https://atlas.ripe.net/docs/getting-started/credits/>
-- *Billing, Payment and Fees* (2026 LIR fees) — <https://www.ripe.net/membership/payment/>
+- *Credits* (official docs, all figures above) - <https://atlas.ripe.net/docs/getting-started/credits/>
+- *Billing, Payment and Fees* (2026 LIR fees) - <https://www.ripe.net/membership/payment/>

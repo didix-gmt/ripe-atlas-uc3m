@@ -2,7 +2,7 @@
 
 ## In one sentence
 
-RIPE Atlas is a **global network of probes** that continuously measure Internet connectivity and reachability, and whose data is largely public.
+RIPE Atlas is a global network of probes that actively measure Internet connectivity and reachability, giving a real-time picture of the state of the Internet.
 
 ## Core concepts
 

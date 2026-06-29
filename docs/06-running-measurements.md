@@ -17,7 +17,7 @@ On <https://atlas.ripe.net>, the *Measurements* page → green **"Create a Measu
 
 ## 2. Public read API (no credits, no account)
 
-To **read** existing data, a simple URL is enough. Example — count connected probes in Spain:
+To **read** existing data, a simple URL is enough. Example - count connected probes in Spain:
 
 ```
 https://atlas.ripe.net/api/v2/probes/?country_code=ES&status=1
@@ -97,8 +97,6 @@ atlas_request = AtlasCreateRequest(
 print(is_success, response)
 ```
 
-> ⚠️ **For our topic:** setting `is_oneoff=True` launches a **one-off** measurement, which costs 2× more per result than a periodic one (see [page 3](03-credit-system.md)). To observe a block **before / during / after** a match, a **periodic** measurement with `start_time` and `stop_time` is more suitable and cheaper.
-
 ### Example: fetch a measurement's results
 
 ```python
@@ -137,13 +135,9 @@ RIPE also maintains **Sagan**, a library that handles result format changes and 
 
 ---
 
-## Link to the project pipeline
-
-Once results are fetched (as JSON), the rest of the analysis pipeline (CSV/SQLite storage, Pandas processing, Matplotlib/Plotly visualisation) is described in the internship's general tasks. The idea: automate *create measurement → fetch → timestamped storage → before/during/after-match analysis*.
-
 ## Sources
 
-- *Cousteau — Use & Examples* (official docs, all examples above) — <https://ripe-atlas-cousteau.readthedocs.io/en/latest/use.html>
-- *ripe-atlas-cousteau* (official repo) — <https://github.com/RIPE-NCC/ripe-atlas-cousteau>
-- *Measuring IP Connectivity with RIPE Atlas* (RIPE Labs, full example) — <https://labs.ripe.net/author/branimir_petricevic/measuring-ip-connectivity-with-ripe-atlas/>
-- *Sagan* (result parsing) — <https://atlas.ripe.net/docs/tools-and-code/sagan/>
+- *Cousteau - Use & Examples* (official docs, all examples above) - <https://ripe-atlas-cousteau.readthedocs.io/en/latest/use.html>
+- *ripe-atlas-cousteau* (official repo) - <https://github.com/RIPE-NCC/ripe-atlas-cousteau>
+- *Measuring IP Connectivity with RIPE Atlas* (RIPE Labs, full example) - <https://labs.ripe.net/author/branimir_petricevic/measuring-ip-connectivity-with-ripe-atlas/>
+- *Sagan* (result parsing) - <https://atlas.ripe.net/docs/tools-and-code/sagan/>

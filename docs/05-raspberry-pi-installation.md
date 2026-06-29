@@ -1,3 +1,9 @@
+---
+layout: default
+title: Installing a software probe on Raspberry Pi
+nav_order: 6
+---
+
 # 5. Installing a software probe on Raspberry Pi
 
 Procedure verified against the official `RIPE-NCC/ripe-atlas-software-probe` repository (release 5120, Oct 2025). Also tested elsewhere on a Raspberry Pi 5 with Raspberry Pi OS Lite 64-bit (source at the bottom); the Pi 3B follows the same procedure.
@@ -108,3 +114,5 @@ To earn credits and provide useful data, the probe must stay **connected continu
 - *Setting up a RIPE Atlas software probe*, L. Rodriguez (procedure tested on Pi 5, key/tunnel details) - <https://www.lucasrodriguez.net/posts/ripe-atlas-software-probe-setup/>
 - *Software probes* (official docs) - <https://atlas.ripe.net/docs/howtos/software-probes/>
 - v3/v4 probe specs (RAM order of magnitude) - <https://atlas.ripe.net/docs/probeinfo/probe-v4/>
+- *Probe v3* spec page (pour compléter le lien v4 déjà présent) — <https://atlas.ripe.net/docs/probeinfo/probe-v3/>
+- *RIPE Atlas: Presentations, Tutorials and Videos* (RIPE Labs) — <https://labs.ripe.net/atlas/user-experiences/presentations-tutorials-and-videos>

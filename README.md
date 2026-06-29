@@ -1,3 +1,10 @@
+---
+layout: default
+title: Home
+nav_order: 1
+permalink: /
+---
+
 # Getting Started with RIPE Atlas - Guide
 
 > Written as part of a project measuring network blocking (La Liga anti-piracy).

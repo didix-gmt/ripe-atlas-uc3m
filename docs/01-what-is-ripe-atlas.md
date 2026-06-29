@@ -1,3 +1,9 @@
+---
+layout: default
+title: What is RIPE Atlas?
+nav_order: 2
+---
+
 # 1. What is RIPE Atlas?
 
 ## In one sentence
@@ -34,3 +40,6 @@ Our topic is to measure IP/DNS blocking applied by Spanish ISPs during football 
 - *What is RIPE Atlas?* — <https://atlas.ripe.net/docs/getting-started/what-is-ripe-atlas/>
 - *How RIPE Atlas works* (RIPE NCC) — <https://www.ripe.net/analyse/internet-measurements/ripe-atlas/how-ripe-atlas-works/>
 - *RIPE Atlas Guide* (community, for measurement types) — <https://ripe-atlas-guide.0x03c0.com/index.php/RIPE_Atlas>
+- *RIPE Atlas Probes and Anchors* (Internet Society) — <https://www.internetsociety.org/resources/doc/2016/ripe-atlas-probes-and-anchors/>
+- *RIPE Atlas* (official intro video, RIPE NCC YouTube) — <https://www.youtube.com/watch?v=Z3SW2vO8qW0>
+- *RIPE Atlas: Presentations, Tutorials and Videos* (RIPE Labs) — <https://labs.ripe.net/atlas/user-experiences/presentations-tutorials-and-videos>

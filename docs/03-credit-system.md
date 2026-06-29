@@ -1,3 +1,9 @@
+---
+layout: default
+title: The credit system
+nav_order: 4
+---
+
 # 3. The credit system
 
 RIPE Atlas runs on **credits**. You earn them by contributing to the network, and spend them by running your own measurements.
@@ -13,7 +19,7 @@ RIPE Atlas runs on **credits**. You earn them by contributing to the network, an
 | Existing public data | €0 | - (no credits needed) | Yes to exploit existing data |
 
 **The detail that matters**: a host receives **15 credits per minute** their probe is connected, i.e. **~21,600 credits / 24h** per probe, as long as it stays connected. Accounts are credited once per day. On top of that, a small bonus of **1 credit per delivered measurement result** - but that's marginal, the bulk comes simply from staying connected. **You don't need anyone else to use your probe to earn credits.**
-
+Hosting more than one probe earns credits independently for each - roughly doubling to ~43,200 credits/day with 2 probes. This is capped though: RIPE limits software probes to 2 per IP address (4 per BGP prefix), specifically to prevent this from being used to farm unlimited credits (see [page 2](02-hardware-vs-software-probe.md) for the full table).
 ## How you spend credits
 
 Each measurement has a **cost per result** that depends on its type. Official unit costs:
@@ -59,3 +65,5 @@ With ~21,600 credits/day from a single probe:
 
 - *Credits* (official docs, all figures above) - <https://atlas.ripe.net/docs/getting-started/credits/>
 - *Billing, Payment and Fees* (2026 LIR fees) - <https://www.ripe.net/membership/payment/>
+- *What Can You Do with One Million RIPE Atlas Credits?* (RIPE Labs) — <https://labs.ripe.net/author/becha/what-can-you-do-with-one-million-ripe-atlas-credits/>
+- *RIPE Atlas: Presentations, Tutorials and Videos* (RIPE Labs) — <https://labs.ripe.net/atlas/user-experiences/presentations-tutorials-and-videos>

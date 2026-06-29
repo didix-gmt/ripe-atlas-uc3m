@@ -1,1 +1,6 @@
-theme: jekyll-theme-jekyll
+# _config.yml
+title: RIPE Atlas - UC3M Onboarding Guide
+description: Internal guide for setting up and using RIPE Atlas as part of the network blocking measurement project at UC3M.
+remote_theme: just-the-docs/just-the-docs
+plugins:
+  - jekyll-remote-theme

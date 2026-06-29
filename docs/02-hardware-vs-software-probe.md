@@ -1,3 +1,9 @@
+---
+layout: default
+title: Hardware vs software probe
+nav_order: 3
+---
+
 # 2. Hardware vs software probe
 
 Both probe types provide **the same service** and run the same measurements. The difference is in how you obtain, install and control them.
@@ -47,3 +53,4 @@ Keep in mind that with a software probe, updates have to be applied manually (`a
 - *Probes, Hosts, Anchors & Sponsors* (FAQ) - <https://atlas.ripe.net/docs/faq/probes-hosts-anchors-sponsors/>
 - *ripe-atlas-software-probe* (supported platforms) - <https://github.com/RIPE-NCC/ripe-atlas-software-probe>
 - *Managing Your Probe* (firmware auto-update, software probe network limits) — <https://atlas.ripe.net/docs/faq/managing-your-probe/>
+- *RIPE Atlas: Presentations, Tutorials and Videos* (RIPE Labs) — <https://labs.ripe.net/atlas/user-experiences/presentations-tutorials-and-videos>

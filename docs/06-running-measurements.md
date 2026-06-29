@@ -1,3 +1,9 @@
+---
+layout: default
+title: Running measurements
+nav_order: 7
+---
+
 # 6. Running measurements (web UI + Python API)
 
 Three ways to interact with RIPE Atlas, from simplest to most automatable:
@@ -141,3 +147,4 @@ RIPE also maintains **Sagan**, a library that handles result format changes and 
 - *ripe-atlas-cousteau* (official repo) - <https://github.com/RIPE-NCC/ripe-atlas-cousteau>
 - *Measuring IP Connectivity with RIPE Atlas* (RIPE Labs, full example) - <https://labs.ripe.net/author/branimir_petricevic/measuring-ip-connectivity-with-ripe-atlas/>
 - *Sagan* (result parsing) - <https://atlas.ripe.net/docs/tools-and-code/sagan/>
+- *RIPE Atlas: Presentations, Tutorials and Videos* (RIPE Labs) — <https://labs.ripe.net/atlas/user-experiences/presentations-tutorials-and-videos>

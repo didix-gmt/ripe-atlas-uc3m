@@ -14,7 +14,7 @@ permalink: /
 
 ## Who this guide is for
 
-You, if you're joining the project and have never touched RIPE Atlas. It assumes you know basic networking (IP, DNS, ping) but not the RIPE ecosystem. Everything stated here is sourced at the bottom of each page - if a claim has no source, it's still **to be verified**, and that's flagged as such.
+You, if you're joining the project and have never touched RIPE Atlas. It assumes you know basic networking (IP, DNS, ping) but not the RIPE ecosystem. Everything stated here is sourced at the bottom of each page.
 
 ## Contents
 

@@ -31,9 +31,12 @@ Available measurement types are: **ping, traceroute, DNS, NTP, TLS/SSL, and HTTP
 ## Why this is relevant to our project
 
 Our topic is to measure IP/DNS blocking applied by Spanish ISPs during football matches. RIPE Atlas gives us:
-- vantage points **physically located in Spain**, on real ISPs, hence subject to the same blocks as an ordinary subscriber;
+- vantage points **inside Spanish ISPs' networks**, to observe whether a block is actually applied to local subscribers;
+- vantage points **outside Spain** (Europe, Americas, Asia), to determine whether a block is Spain-specific or global, a page that times out from Madrid but loads fine from Berlin is likely locally blocked, not down;
 - the ability to launch targeted tests (ping/DNS/HTTP) towards the IPs suspected of being blocked;
 - access to data already collected by others, without installing anything.
+
+> **Key point: you are not limited to your own probe.** RIPE Atlas is a shared network, once you have an account and credits, you can launch measurements from *any* of the thousands of probes hosted by other people around the world, not just your own. Your probe contributes to the network and earns credits; those credits are then spent to task other probes anywhere on the planet. This is what makes distributed, multi-continent measurements possible without owning hardware in every country.
 
 ## Sources
 

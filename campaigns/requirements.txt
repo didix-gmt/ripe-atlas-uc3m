@@ -1,0 +1,4 @@
+ripe-atlas-cousteau
+matplotlib
+requests
+python-dotenv

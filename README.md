@@ -24,6 +24,7 @@ You, if you're joining the project and have never touched RIPE Atlas. It assumes
 4. [Using existing data](docs/04-existing-data.md) - measuring without installing anything
 5. [Installing a software probe on Raspberry Pi](docs/05-raspberry-pi-installation.md) - the step-by-step procedure
 6. [Running measurements (web UI + Python API)](docs/06-running-measurements.md) - create a measurement and fetch results
+7. [Example campaign: latency vs distance](docs/07-example-campaign.md) - a complete working measurement, from probe selection to plot
 
 ---
 

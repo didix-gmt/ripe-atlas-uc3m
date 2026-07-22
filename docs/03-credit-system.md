@@ -18,7 +18,8 @@ RIPE Atlas runs on **credits**. You earn them by contributing to the network, an
 | Transfer from another user | €0 | Variable | If UC3M already has a credited account |
 | Existing public data | €0 | No credits needed | Yes to exploit existing data |
 
-**The detail that matters**: a host receives **15 credits per minute** their probe is connected, i.e. **~21,600 credits / 24h** per probe, as long as it stays connected. Accounts are credited once per day. On top of that, a small bonus of **1 credit per delivered measurement result** - but that's marginal, the bulk comes simply from staying connected. **You don't need anyone else to use your probe to earn credits.**
+**The detail that matters**: a host receives **15 credits per minute** their probe is connected, i.e. **~21,600 credits / 24h** per probe, as long as it stays connected. Accounts are credited once per day, showing up as two separate entries in the credits history: one for uptime ("Probe uptime"), one for the probe's participation in RIPE's *built-in* measurements, the ones running automatically in the background, not the ones we create ourselves ("For results delivered"). **You don't need anyone else to use your probe to earn credits.**
+
 Hosting more than one probe earns credits independently for each - roughly doubling to ~43,200 credits/day with 2 probes. This is capped though: RIPE limits software probes to 2 per IP address (4 per BGP prefix), specifically to prevent this from being used to farm unlimited credits (see [page 2](02-hardware-vs-software-probe.md) for the full table).
 ## How you spend credits
 

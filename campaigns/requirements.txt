@@ -1,4 +1,7 @@
 ripe-atlas-cousteau
-matplotlib
 requests
 python-dotenv
+matplotlib
+pandas
+plotly
+kaleido

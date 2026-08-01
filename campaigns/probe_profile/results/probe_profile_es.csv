@@ -1,0 +1,260 @@
+probe_id,asn,isp,is_target_isp,label,confidence,reason
+334,3352.0,Movistar / Telefonica,True,RESIDENTIAL,declared,location tag: home
+660,57269.0,Other (AS57269),False,RESIDENTIAL,declared,location tag: home
+715,3352.0,Movistar / Telefonica,True,INFRASTRUCTURE,declared,location tag: office
+1531,200845.0,Other (AS200845),False,RESIDENTIAL,declared,location tag: home
+2001,12479.0,Orange Espana,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+2023,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+2231,216392.0,Other (AS216392),False,RESIDENTIAL,declared,location tag: home
+2595,,Other (unknown AS),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+3712,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+3755,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+3785,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+4053,15488.0,Other (AS15488),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+4640,35699.0,Other (AS35699),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+6352,13041.0,Other (AS13041),False,INFRASTRUCTURE,certain,anchor / virtual anchor
+6604,15954.0,Other (AS15954),False,INFRASTRUCTURE,certain,anchor / virtual anchor
+6668,202422.0,Other (AS202422),False,INFRASTRUCTURE,certain,anchor / virtual anchor
+6687,39069.0,Other (AS39069),False,INFRASTRUCTURE,certain,anchor / virtual anchor
+6926,48386.0,Other (AS48386),False,INFRASTRUCTURE,certain,anchor / virtual anchor
+6980,16552.0,Other (AS16552),False,INFRASTRUCTURE,certain,anchor / virtual anchor
+7017,42612.0,Other (AS42612),False,INFRASTRUCTURE,certain,anchor / virtual anchor
+7086,15699.0,Other (AS15699),False,INFRASTRUCTURE,certain,anchor / virtual anchor
+7089,15699.0,Other (AS15699),False,INFRASTRUCTURE,certain,anchor / virtual anchor
+7393,56958.0,Other (AS56958),False,INFRASTRUCTURE,certain,anchor / virtual anchor
+7536,197712.0,Other (AS197712),False,INFRASTRUCTURE,certain,anchor / virtual anchor
+7649,6750.0,Other (AS6750),False,INFRASTRUCTURE,certain,anchor / virtual anchor
+7703,198731.0,Other (AS198731),False,INFRASTRUCTURE,certain,anchor / virtual anchor
+10836,13287.0,Other (AS13287),False,UNKNOWN,weak-hint,"hardware probe, no location tag"
+11124,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+11600,30892.0,Other (AS30892),False,UNKNOWN,weak-hint,"hardware probe, no location tag"
+11602,30892.0,Other (AS30892),False,INFRASTRUCTURE,declared,location tag: datacentre
+11749,13041.0,Other (AS13041),False,UNKNOWN,weak-hint,"hardware probe, no location tag"
+11958,12430.0,Vodafone Espana,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+12153,12479.0,Orange Espana,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+12884,3352.0,Movistar / Telefonica,True,INFRASTRUCTURE,declared,location tag: office
+13337,57269.0,Other (AS57269),False,INFRASTRUCTURE,declared,location tag: office
+13678,200845.0,Other (AS200845),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+13881,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+13896,766.0,Other (AS766),False,INFRASTRUCTURE,declared,"location tag: academic, core"
+14782,12430.0,Vodafone Espana,True,RESIDENTIAL,declared,location tag: home
+15118,3352.0,Movistar / Telefonica,True,RESIDENTIAL,declared,location tag: home
+15632,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+15873,15704.0,Other (AS15704),False,RESIDENTIAL,declared,location tag: home
+18273,51718.0,Other (AS51718),False,UNKNOWN,weak-hint,"hardware probe, no location tag"
+18530,15704.0,Other (AS15704),False,RESIDENTIAL,declared,location tag: home
+18651,3262.0,Other (AS3262),False,INFRASTRUCTURE,declared,location tag: office
+18801,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+18833,57269.0,Other (AS57269),False,UNKNOWN,conflicting,both: home / core
+18844,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+19292,44431.0,Other (AS44431),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+19882,15704.0,Other (AS15704),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+20136,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+20757,12319.0,Other (AS12319),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+21271,15704.0,Other (AS15704),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+21570,207614.0,Other (AS207614),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+21665,12430.0,Vodafone Espana,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+22291,41397.0,Other (AS41397),False,UNKNOWN,weak-hint,"hardware probe, no location tag"
+22309,3352.0,Movistar / Telefonica,True,RESIDENTIAL,declared,location tag: home
+22338,3352.0,Movistar / Telefonica,True,UNKNOWN,conflicting,both: home / core
+22806,203457.0,Other (AS203457),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+23120,61408.0,Other (AS61408),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+23267,57656.0,Other (AS57656),False,INFRASTRUCTURE,declared,"location tag: datacentre, isp"
+23268,8311.0,Other (AS8311),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+23333,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+23581,203641.0,Other (AS203641),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+23685,3262.0,Other (AS3262),False,INFRASTRUCTURE,declared,location tag: office
+23686,12479.0,Orange Espana,True,RESIDENTIAL,declared,location tag: home
+24086,8220.0,Other (AS8220),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+24385,24592.0,Other (AS24592),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+24830,50926.0,Other (AS50926),False,INFRASTRUCTURE,declared,location tag: datacentre
+26072,3352.0,Movistar / Telefonica,True,RESIDENTIAL,declared,location tag: home
+27073,15704.0,Other (AS15704),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+27076,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+27388,200845.0,Other (AS200845),False,RESIDENTIAL,declared,location tag: home
+29823,34977.0,Other (AS34977),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+30039,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+30356,12430.0,Vodafone Espana,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+30392,3352.0,Movistar / Telefonica,True,INFRASTRUCTURE,declared,location tag: office
+30488,15704.0,Other (AS15704),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+31427,41368.0,Other (AS41368),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+33818,3352.0,Movistar / Telefonica,True,INFRASTRUCTURE,declared,location tag: office
+33948,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+33970,3352.0,Movistar / Telefonica,True,INFRASTRUCTURE,declared,location tag: office
+33971,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+34344,3352.0,Movistar / Telefonica,True,RESIDENTIAL,declared,location tag: home
+34664,200845.0,Other (AS200845),False,RESIDENTIAL,declared,location tag: home
+34960,16276.0,Other (AS16276),False,RESIDENTIAL,declared,location tag: home
+35685,57269.0,Other (AS57269),False,RESIDENTIAL,declared,location tag: home
+35783,6739.0,Other (AS6739),False,RESIDENTIAL,declared,location tag: home
+50328,33932.0,Other (AS33932),False,RESIDENTIAL,declared,location tag: home
+50584,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+50990,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+51046,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+51265,3352.0,Movistar / Telefonica,True,RESIDENTIAL,declared,location tag: home
+51352,3352.0,Movistar / Telefonica,True,INFRASTRUCTURE,declared,location tag: office
+52746,766.0,Other (AS766),False,UNKNOWN,weak-hint,"hardware probe, no location tag"
+52969,200030.0,Other (AS200030),False,INFRASTRUCTURE,declared,"location tag: core, datacentre, isp"
+53229,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+53240,15450.0,Other (AS15450),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+53528,12479.0,Orange Espana,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+53761,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+53792,15704.0,Other (AS15704),False,RESIDENTIAL,declared,location tag: home
+54639,12479.0,Orange Espana,True,RESIDENTIAL,declared,location tag: home
+55346,57269.0,Other (AS57269),False,RESIDENTIAL,declared,location tag: home
+55420,,Other (unknown AS),False,RESIDENTIAL,declared,location tag: home
+55502,202367.0,Other (AS202367),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+55661,3352.0,Movistar / Telefonica,True,RESIDENTIAL,declared,location tag: home
+55787,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+60032,14593.0,Other (AS14593),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+60061,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+60133,12479.0,Orange Espana,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+60135,12430.0,Vodafone Espana,True,RESIDENTIAL,declared,location tag: home
+60319,60273.0,Other (AS60273),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+60464,12540.0,Other (AS12540),False,INFRASTRUCTURE,declared,"location tag: datacentre, isp"
+60555,15704.0,Other (AS15704),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+60561,3352.0,Movistar / Telefonica,True,RESIDENTIAL,declared,location tag: home
+60589,209910.0,Other (AS209910),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+60610,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+60629,15704.0,Other (AS15704),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+60668,57269.0,Other (AS57269),False,RESIDENTIAL,declared,location tag: home
+60741,205580.0,Other (AS205580),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+60780,8903.0,Other (AS8903),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+60900,12479.0,Orange Espana,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+61019,3262.0,Other (AS3262),False,INFRASTRUCTURE,declared,location tag: office
+61052,207026.0,Other (AS207026),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+61201,56882.0,Other (AS56882),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+61230,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+61357,3352.0,Movistar / Telefonica,True,RESIDENTIAL,declared,location tag: home
+61456,3352.0,Movistar / Telefonica,True,RESIDENTIAL,declared,location tag: home
+61476,56882.0,Other (AS56882),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+61531,12479.0,Orange Espana,True,RESIDENTIAL,declared,location tag: home
+61547,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+61646,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+61719,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+62255,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+62301,205241.0,Other (AS205241),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+62325,60171.0,Other (AS60171),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+62336,766.0,Other (AS766),False,UNKNOWN,weak-hint,"hardware probe, no location tag"
+62588,3352.0,Movistar / Telefonica,True,RESIDENTIAL,declared,location tag: home
+62669,62412.0,Other (AS62412),False,INFRASTRUCTURE,declared,location tag: isp
+62908,3352.0,Movistar / Telefonica,True,RESIDENTIAL,declared,location tag: home
+62939,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+63047,207714.0,Other (AS207714),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+63051,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+63085,34511.0,Other (AS34511),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+64325,12430.0,Vodafone Espana,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+64740,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+64841,12479.0,Orange Espana,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+65028,15704.0,Other (AS15704),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+65094,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+65424,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+65581,43747.0,Other (AS43747),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+65771,199496.0,Other (AS199496),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1000820,8075.0,Other (AS8075),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1000964,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1001603,15704.0,Other (AS15704),False,RESIDENTIAL,declared,location tag: home
+1001896,12479.0,Orange Espana,True,RESIDENTIAL,declared,location tag: home
+1002174,25412.0,Other (AS25412),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1002549,12479.0,Orange Espana,True,RESIDENTIAL,declared,location tag: home
+1002938,15704.0,Other (AS15704),False,UNKNOWN,weak-hint,"software probe, no location tag"
+1003694,766.0,Other (AS766),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1003800,8560.0,Other (AS8560),False,UNKNOWN,weak-hint,"software probe, no location tag"
+1003970,3352.0,Movistar / Telefonica,True,UNKNOWN,weak-hint,"software probe, no location tag"
+1004021,57269.0,Other (AS57269),False,RESIDENTIAL,declared,location tag: home
+1004036,59432.0,Other (AS59432),False,UNKNOWN,weak-hint,"software probe, no location tag"
+1004037,202053.0,Other (AS202053),False,UNKNOWN,weak-hint,"software probe, no location tag"
+1004181,12540.0,Other (AS12540),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1004189,12540.0,Other (AS12540),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1004488,57269.0,Other (AS57269),False,RESIDENTIAL,declared,location tag: home
+1004871,12338.0,Other (AS12338),False,INFRASTRUCTURE,declared,location tag: academic
+1004991,16509.0,Other (AS16509),False,INFRASTRUCTURE,declared,location tag: datacentre
+1005076,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1005149,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1005389,62080.0,Other (AS62080),False,INFRASTRUCTURE,declared,location tag: datacentre
+1005512,12338.0,Other (AS12338),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1005513,42612.0,Other (AS42612),False,INFRASTRUCTURE,declared,"location tag: core, datacentre"
+1005622,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1005907,3352.0,Movistar / Telefonica,True,INFRASTRUCTURE,declared,location tag: office
+1006106,13335.0,Other (AS13335),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1006162,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1006501,205697.0,Other (AS205697),False,INFRASTRUCTURE,declared,"location tag: datacentre, isp"
+1006504,205697.0,Other (AS205697),False,INFRASTRUCTURE,declared,"location tag: datacentre, isp"
+1006507,57269.0,Other (AS57269),False,RESIDENTIAL,declared,location tag: home
+1007366,57656.0,Other (AS57656),False,UNKNOWN,weak-hint,"software probe, no location tag"
+1007401,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1007637,14593.0,Other (AS14593),False,UNKNOWN,weak-hint,"software probe, no location tag"
+1008081,35699.0,Other (AS35699),False,RESIDENTIAL,declared,location tag: home
+1008102,3352.0,Movistar / Telefonica,True,INFRASTRUCTURE,declared,location tag: office
+1008103,3352.0,Movistar / Telefonica,True,RESIDENTIAL,declared,location tag: home
+1008253,3352.0,Movistar / Telefonica,True,RESIDENTIAL,declared,location tag: home
+1008262,12334.0,Other (AS12334),False,INFRASTRUCTURE,declared,location tag: office
+1008315,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1008697,214286.0,Other (AS214286),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1009199,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1009371,208909.0,Other (AS208909),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1009570,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1009571,15704.0,Other (AS15704),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1009931,202550.0,Other (AS202550),False,UNKNOWN,weak-hint,"software probe, no location tag"
+1010138,12430.0,Vodafone Espana,True,RESIDENTIAL,declared,location tag: home
+1010154,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1010165,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1010186,15704.0,Other (AS15704),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1010196,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1010244,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1010265,3352.0,Movistar / Telefonica,True,RESIDENTIAL,declared,location tag: home
+1010282,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1010295,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1010344,12479.0,Orange Espana,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1010492,8075.0,Other (AS8075),False,UNKNOWN,weak-hint,"software probe, no location tag"
+1010520,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1010775,8560.0,Other (AS8560),False,UNKNOWN,weak-hint,"software probe, no location tag"
+1010830,8560.0,Other (AS8560),False,UNKNOWN,weak-hint,"software probe, no location tag"
+1011254,6739.0,Other (AS6739),False,UNKNOWN,weak-hint,"software probe, no location tag"
+1011276,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1011324,12479.0,Orange Espana,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1011326,14593.0,Other (AS14593),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1011384,8560.0,Other (AS8560),False,UNKNOWN,weak-hint,"software probe, no location tag"
+1011425,59432.0,Other (AS59432),False,UNKNOWN,weak-hint,"software probe, no location tag"
+1011553,3352.0,Movistar / Telefonica,True,RESIDENTIAL,declared,location tag: home
+1011621,15704.0,Other (AS15704),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1011635,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1012121,3352.0,Movistar / Telefonica,True,UNKNOWN,weak-hint,"software probe, no location tag"
+1012254,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1012384,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1012389,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1012763,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1012779,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1012988,3352.0,Movistar / Telefonica,True,UNKNOWN,weak-hint,"software probe, no location tag"
+1013074,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1013122,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1013330,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1013336,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1013504,208909.0,Other (AS208909),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1013505,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1013866,8560.0,Other (AS8560),False,UNKNOWN,weak-hint,"software probe, no location tag"
+1014607,29119.0,Other (AS29119),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1014624,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1014824,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1014886,57269.0,Other (AS57269),False,RESIDENTIAL,declared,location tag: home
+1015262,212812.0,Other (AS212812),False,UNKNOWN,weak-hint,"software probe, no location tag"
+1015308,212087.0,Other (AS212087),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1015309,212087.0,Other (AS212087),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1015515,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1015573,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1015581,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1015656,12430.0,Vodafone Espana,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1015934,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1015994,12479.0,Orange Espana,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1016035,210423.0,Other (AS210423),False,INFRASTRUCTURE,declared,location tag: datacentre
+1016144,49008.0,Other (AS49008),False,UNKNOWN,weak-hint,"software probe, no location tag"
+1016422,57269.0,Other (AS57269),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1016432,12430.0,Vodafone Espana,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1016435,16509.0,Other (AS16509),False,INFRASTRUCTURE,declared,location tag: datacentre
+1016647,199976.0,Other (AS199976),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1016654,12479.0,Orange Espana,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1016655,201704.0,Other (AS201704),False,UNKNOWN,weak-hint,"software probe, no location tag"
+1016692,12334.0,Other (AS12334),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1016694,12338.0,Other (AS12338),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1016720,3352.0,Movistar / Telefonica,True,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"
+1016773,766.0,Other (AS766),False,RESIDENTIAL,soft-inference,"behind NAT (system-ipv4-rfc1918), no location tag"

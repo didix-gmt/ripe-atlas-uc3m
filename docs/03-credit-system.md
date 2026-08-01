@@ -20,6 +20,8 @@ RIPE Atlas runs on **credits**. You earn them by contributing to the network, an
 
 **The detail that matters**: a host receives **15 credits per minute** their probe is connected, i.e. **~21,600 credits / 24h** per probe, as long as it stays connected. Accounts are credited once per day, showing up as two separate entries in the credits history: one for uptime ("Probe uptime"), one for the probe's participation in RIPE's *built-in* measurements, the ones running automatically in the background, not the ones we create ourselves ("For results delivered"). **You don't need anyone else to use your probe to earn credits.**
 
+> **In practice the "results delivered" bonus is much larger than the docs suggest.** On our own probe it has consistently been ~10,500-12,000 credits/day on top.
+
 Hosting more than one probe earns credits independently for each - roughly doubling to ~43,200 credits/day with 2 probes. This is capped though: RIPE limits software probes to 2 per IP address (4 per BGP prefix), specifically to prevent this from being used to farm unlimited credits (see [page 2](02-hardware-vs-software-probe.md) for the full table).
 ## How you spend credits
 
@@ -49,7 +51,7 @@ With ~21,600 credits/day from a single probe:
 | DNS (TCP) | 20 | ~1,080 |
 | Traceroute | 30 | ~720 |
 
-**Concrete example.** Testing 1,000 IPs with a single ping: 1,000 × 3 = **3,000 credits** (easy). But repeating that test every 5 min for a 3h match: 1,000 × 36 × 3 = **108,000 credits**, i.e. ~5 days of a single probe's income. → You'll need to **either limit** the frequency/number of IPs, **or accumulate** credits over several days before a match, **or use multiple probes.
+**Concrete example.** Testing 1,000 IPs with a single ping: 1,000 × 3 = **3,000 credits** (easy). But repeating that test every 5 min for a 3h match: 1,000 × 36 × 3 = **108,000 credits**, i.e. ~5 days of a single probe's income. → You'll need to **either limit** the frequency/number of IPs, **or accumulate** credits over several days before a match, **or use multiple probes**.
 
 ## If you run out of credits
 

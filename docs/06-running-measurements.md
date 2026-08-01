@@ -11,6 +11,8 @@ Three ways to interact with RIPE Atlas, from simplest to most automatable:
 2. the **public read API** (fetch data, no credits or account);
 3. the **official Python library `ripe-atlas-cousteau`** (create measurements and fetch results via code).
 
+> `is_oneoff=True` costs 2× more per result than a periodic measurement (see [page 3](03-credit-system.md)).
+
 > **Your own probe is not your only source.** When you create a measurement, you choose which probes execute it, this can be your own Pi, but also any probe from the global RIPE Atlas fleet. You select them by country, ASN, or individual ID. The probes receive the instruction from RIPE's infrastructure, run the test from their local network, and send results back (you never have direct access to those machines, only to their results).
 
 ---

@@ -74,4 +74,4 @@ Whether through the web UI, the API, or the daily probe archive, a "connected" s
 - *Announcing Daily RIPE Atlas Data Archives* (RIPE Labs — archive format, 30-day window for measurement results) — <https://labs.ripe.net/author/petros_gigis/announcing-daily-ripe-atlas-data-archives/>
 - *RIPE Atlas API Changes* (RIPE Labs — probe archive vs. measurement archive, why archives beat crawling the API for bulk data) — <https://labs.ripe.net/author/kistel/ripe-atlas-api-changes/>
 - *RIPE Atlas: Presentations, Tutorials and Videos* (RIPE Labs) — <https://labs.ripe.net/atlas/user-experiences/presentations-tutorials-and-videos>
-- *ripe-atlas-bigquery* (official repo, référencé dans l'encadré BigQuery) — <https://github.com/RIPE-NCC/ripe-atlas-bigquery>
+- *ripe-atlas-bigquery* (official repo, referenced in the BigQuery note above) - <https://github.com/RIPE-NCC/ripe-atlas-bigquery>

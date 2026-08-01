@@ -25,6 +25,8 @@ You, if you're joining the project and have never touched RIPE Atlas. It assumes
 5. [Installing a software probe on Raspberry Pi](docs/05-raspberry-pi-installation.md) - the step-by-step procedure
 6. [Running measurements (web UI + Python API)](docs/06-running-measurements.md) - create a measurement and fetch results
 7. [Example campaign: latency vs distance](docs/07-example-campaign.md) - a complete working measurement, from probe selection to plot
+8. [Pitfalls in blocking detection](docs/08-pitfalls.md) - false positives to avoid before running a real campaign
+9. [Probe coverage in Spain](docs/09-probe-coverage-spain.md) - how many usable vantage points per ISP, and what that means for the study design
 
 ---
 

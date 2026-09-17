@@ -1,0 +1,10 @@
+# Minimal target list for pipeline validation only.
+#
+# Three addresses is enough to confirm that measurements get created,
+# execute, and can be fetched. Do not read anything into the results:
+# a test run outside a match window should show no blocking at all,
+# which is the expected outcome, not a finding.
+
+188.114.97.5        # Cloudflare - the ground-truth IP, unblocked outside matches
+1.1.1.1             # Cloudflare public resolver - control
+8.8.8.8             # Google public resolver - control

@@ -6,115 +6,122 @@ nav_order: 10
 
 # 9. Probe coverage in Spain
 
-Before designing a campaign, you need to know what you can actually measure. This page documents how many usable vantage points exist inside each Spanish ISP, how that number was obtained, and what it means for the study design.
+Before designing a campaign you need to know what you can actually measure. This page documents how many usable vantage points exist inside each Spanish ISP, and how that shaped the sampling design.
 
-The short version: coverage is uneven. Two operators support solid statistical claims, three support weaker ones, and that asymmetry has to be stated in any result we publish rather than hidden behind an average.
-
----
-
-## Why residential probes specifically
-
-The La Liga injunctions require ISPs to block for their **consumer subscribers**. A probe sitting in a university network, a hosting provider or a corporate line may carry the same AS number as a home connection while sitting on a completely different side of the filter.
-
-Measuring only from such probes risks a **false negative**: concluding "no blocking" when we were simply looking from the wrong place. This is the mirror image of the TLS false-positive problem described on [page 8](08-pitfalls.md), and just as damaging.
+It also documents a methodological dead end we went down first, because the reasoning behind abandoning it is more useful than the result would have been.
 
 ---
 
-## The problem: RIPE Atlas has no residential tag
+## Why per-ISP coverage matters
 
-There is no system tag for "residential" or "datacentre". The official system tag categories cover only protocol capability, basic connectivity, stability, DNS resolution, and probe metadata (version, software, anchor, virtual, geolocation).
+The La Liga injunctions are addressed to ISPs, and blocking is applied inside each operator's network. So the unit of analysis is the **operator**, not the country: a block present on Telefónica may be absent on Vodafone, and that difference is one of the more interesting things we can measure.
 
-So classification has to be inferred. We combine three signals, checked strongest first:
+That means we need vantage points inside each target AS, and enough of them to say something. Bajpai et al. warned that RIPE Atlas probe distribution across ASes is heavily skewed, so this had to be checked before designing anything.
 
-| Signal | Source | Reliability |
+---
+
+## Coverage, measured
+
+Connected probes in Spain (`country_code=ES&status=1`), 259 at time of writing:
+
+| ISP | AS | Connected probes |
 |---|---|---|
-| `is_anchor` / `system-anchor` / `system-virtual` | System | Certain - infrastructure by definition |
-| Host location tags (`home`, `office`, `datacentre`, `academic`…) | User, voluntary | Reliable when present, absent for most probes |
-| `system-ipv4-rfc1918` (private address → behind NAT) | System | Soft - homes almost always NAT, but so do offices |
+| Telefónica / Movistar | 3352 | 72 |
+| DIGI Spain | 57269 | 35 |
+| Orange Espagne | 12479 | 15 |
+| MásMóvil (Xtra Telecom) | 15704 | 15 |
+| Vodafone España | 12430 | 9 |
+| *All other Spanish ASes* | - | 113 |
 
-### One trap worth knowing about
+The skew Bajpai described is clearly present: the best-covered target operator has eight times more probes than the worst.
 
-An earlier version of our script treated **connection-technology tags** (`fibre`, `ftth`, `dsl`, `cable`, `nat`) as residential markers. They are not: they describe *how* a probe connects, not *where* it sits. An office with fibre is still an office.
-
-The consequence was concrete - every probe tagged `fibre` + `office` was flagged as a contradiction instead of being correctly classified as infrastructure, and probes tagged `fibre` alone were counted as homes. Fixing it doubled the infrastructure count (19 → 41) and cut unresolvable conflicts from 25 to 2.
-
-The current script keeps `CONNECTION_TECH` as an explicit, unused set, so that it is obvious those tags were considered and deliberately excluded.
+> Re-run `probe_profile.py` before any campaign. Probe populations change, and a count from three months ago is not a count from today.
 
 ---
 
-## Results
+## The dead end: trying to identify residential probes
 
-Measured on connected probes in Spain (`country_code=ES&status=1`), 259 probes at time of writing:
+**The initial reasoning.** The injunctions target consumer subscribers, so a probe on a university or corporate line might sit on the wrong side of the filter and produce a false negative. It therefore seemed important to count *residential* probes specifically, not just probes.
 
-| ISP | AS | Declared residential | Inferred (NAT only) | Total residential |
-|---|---|---|---|---|
-| Telefónica / Movistar | 3352 | 16 | 44 | 60 |
-| DIGI Spain | 57269 | 8 | 25 | 33 |
-| Orange Espagne | 12479 | 5 | 10 | 15 |
-| MásMóvil (Xtra Telecom) | 15704 | 4 | 10 | 14 |
-| Vodafone España | 12430 | 3 | 6 | 9 |
+**The problem.** RIPE Atlas publishes no system tag for "residential" or "datacentre" - the official system tags cover only protocol capability, connectivity, stability, DNS resolution and probe metadata. So the classification had to be inferred, and we used three signals: anchors (certain infrastructure), host-declared location tags (`home`, `office`, `datacentre` - reliable but voluntary, so absent on most probes), and `system-ipv4-rfc1918`, meaning the probe holds a private address and therefore sits behind NAT.
 
-**Read this as a range, not a number.** "Declared" is the defensible floor - the host explicitly tagged the probe. "Inferred" rests on the NAT signal alone, which is genuinely soft. Across the five ISPs that gives roughly **36 certain** residential probes and **131 optimistic**.
+**Why we dropped it.** The NAT signal does not carry the weight we put on it. Homes NAT, but so do offices, universities and plenty of hosting setups; conversely some home connections hand a public address straight to the device, so a genuine residential probe may not carry the tag at all. It errs in both directions, and 144 of our 189 "residential" probes rested on that signal alone - only ~45 were host-declared.
 
-Nationwide: 189 of 259 probes classified residential (73%), but 144 of those 189 come from the soft NAT inference. Only about 45 are declared. That ratio is worth keeping in mind before quoting the 73% figure anywhere.
+**And more importantly, the question was the wrong one.** Blocking is applied at the operator's core network, not at the customer's premises. Any probe inside the AS traverses the same filtering infrastructure, whether it sits in a flat or an office. So a precise residential count buys us very little, as long as we exclude probes that might sit behind an *additional* filter of their own.
 
-One reassuring detail: the declaration rate is fairly consistent across operators (24–33%), which suggests hosts tag their probes similarly everywhere, so the NAT inference is probably not biased toward one ISP. With only 3–4 declared probes on some operators, though, that ratio is too small to be conclusive.
+**What replaced it.** A much simpler rule:
+
+- select by AS;
+- exclude anchors and probes explicitly declared as infrastructure (`datacentre`, `academic`, `office`, etc.);
+- treat everything else as usable, without pretending to know whether it is a flat or a small business.
+
+### A trap worth recording anyway
+
+Before dropping the approach we hit a genuine bug in it, and the lesson generalises. An early version treated **connection-technology tags** (`fibre`, `ftth`, `dsl`, `cable`, `nat`) as residential markers. They are not: they describe *how* a probe connects, not *where* it sits. An office with fibre is still an office.
+
+The effect was concrete - every probe tagged `fibre` + `office` was recorded as a contradiction rather than correctly classified as infrastructure, and probes tagged `fibre` alone were counted as homes. Fixing it doubled the infrastructure count (19 → 41) and cut unresolvable conflicts from 25 to 2.
+
+The general lesson: when combining tags into a classification, check that they describe the *same dimension*. Mixing "what kind of place" with "what kind of link" produces confident nonsense.
+
+---
+
+## Sampling design: equal n per operator
+
+The natural instinct is to use every probe available - 72 for Telefónica, 9 for Vodafone. That is a mistake for our purpose, because **the headline analysis is a comparison between operators**. With unequal sample sizes, a difference in detected blocking rate could just as easily reflect the difference in sample size as a real difference in behaviour.
+
+So the design is **the same number of probes per operator**, and that number can be small. Within a single operator we do not expect probe-to-probe variation, since all of them sit behind the same filtering infrastructure - assuming no additional firewall in between, which is what excluding declared infrastructure is for.
+
+**n = 6 per operator** is the current setting (`PROBES_PER_ISP` in `campaign_match.py`). Vodafone's connected count fluctuated between 7 and 9 across several checks during this internship - not a fixed number - so n was set below the observed floor rather than at it, to leave margin if a probe drops before a match. Re-check Vodafone's current count before assuming 6 is still safe.
+
+This also keeps the campaign cheap. 6 probes × 5 operators = 30 target probes per round instead of the 146 a proportional sample would need, which is what buys the sampling frequency needed to pin down *when* blocks start and stop.
+
+**What we give up.** We cannot map variation *inside* an operator's network - regional differences within Telefónica, for instance. That is a separate question requiring a different design, and it should be stated as out of scope rather than left ambiguous.
 
 ---
 
 ## Which ISPs to target
 
-We started with the three obvious consumer ISPs (Movistar, Orange, Vodafone). The coverage data says that list should be **five**.
+We started with the three obvious consumer ISPs (Movistar, Orange, Vodafone). The coverage data says the list should be **five**.
 
-**DIGI (AS57269)** has the second-best probe coverage in Spain - more residential probes than Orange and Vodafone combined. It also has its own dedicated analysis in the OONI report, including an observation that matters: OONI recorded TLS man-in-the-middle activity affecting 7,334 unique IPs across 14 ASNs, hosting 10,759 domain names, on measurements collected from this network.
+**DIGI (AS57269)** has the second-best coverage in Spain, and its own dedicated analysis in the OONI report: TLS man-in-the-middle activity affecting 7,334 unique IPs across 14 ASNs and 10,759 domain names, observed on measurements collected from that network.
 
-> **Wording matters here.** OONI observed this **on** DIGI's network; the report explicitly does not attribute responsibility for the interception. Any write-up should say "observed on", never "performed by". We are documenting a measurement, not making an accusation.
+> ⚠️ **Wording matters here.** OONI observed this **on** DIGI's network; the report explicitly does not attribute responsibility for the interception. Any write-up should say "observed on", never "performed by". We are documenting a measurement, not making an accusation.
 
-**MásMóvil (AS15704)** is listed by OONI among the networks where blocking correlates with match windows, and has residential coverage comparable to Orange.
+**MásMóvil (AS15704)** is in OONI's set of networks showing match-correlated blocking, with coverage equal to Orange.
 
-For reference, the full set of networks where OONI observed match-correlated blocking is broader than five: Telefónica (AS3352), MásMóvil (AS15704), Orange Espagne (AS12479), Vodafone España (AS12430), Mas Orange (AS12334), Vodafone ONI (AS6739) and Euskaltel (AS12338), plus dedicated charts for DigiMobil (AS57269) and RedIRIS (AS766).
+For reference, OONI observed match-correlated blocking on a broader set: Telefónica (AS3352), MásMóvil (AS15704), Orange Espagne (AS12479), Vodafone España (AS12430), Mas Orange (AS12334), Vodafone ONI (AS6739) and Euskaltel (AS12338), plus dedicated charts for DigiMobil (AS57269) and RedIRIS (AS766).
 
-Cross-referencing that list with our probe counts:
+Cross-referenced with our probe counts:
 
-| AS | Operator | Residential probes | In OONI's set | Usable for us? |
+| AS | Operator | Probes | In OONI's set | In scope? |
 |---|---|---|---|---|
-| 3352 | Telefónica | 60 | yes | Yes - statistical claims |
-| 57269 | DIGI | 33 | yes | Yes - statistical claims |
-| 12479 | Orange | 15 | yes | Indicative |
-| 15704 | MásMóvil | 14 | yes | Indicative |
-| 12430 | Vodafone | 9 | yes | Case study only |
-| 766 | RedIRIS | 2 | yes | No - academic network anyway |
-| 12338 | Euskaltel | 2 | yes | No - too few |
-| 6739 | Vodafone ONI | 1 | yes | No - too few |
-| 12334 | Mas Orange | 1 | yes | No - too few |
+| 3352 | Telefónica | 72 | yes | Yes |
+| 57269 | DIGI | 35 | yes | Yes |
+| 12479 | Orange | 15 | yes | Yes |
+| 15704 | MásMóvil | 15 | yes | Yes |
+| 12430 | Vodafone | 7-9 (fluctuates) | yes | Yes - sets n for all, with margin |
+| 766 | RedIRIS | 5 | yes | No - academic network |
+| 12338 | Euskaltel | 3 | yes | No - below n |
+| 6739 | Vodafone ONI | 1 | yes | No - below n |
+| 12334 | Mas Orange | 1 | yes | No - below n |
 
-The bottom four are in OONI's set but have too few probes to support anything. Worth revisiting if their coverage grows.
+The bottom four appear in OONI's data but cannot support an equal-n design. Worth revisiting if their coverage grows.
 
 ---
 
-## Handling the Vodafone problem
+## Control group
 
-Nine probes, three of them confidently residential. If two disconnect during a match - which happens routinely - the result rests on a handful of vantage points.
+Blocking is only meaningful relative to a baseline. Every campaign should include probes **outside Spain** measuring the same targets at the same time - the same design OONI used with a Frankfurt control point.
 
-We are not adding probes, so the approach is to **calibrate the claims to the coverage**:
-
-- **Telefónica and DIGI** - enough probes for statistical claims about blocking prevalence and timing.
-- **Orange and MásMóvil** - indicative; report trends, avoid precise percentages.
-- **Vodafone** - treat as a case study. State the limitation explicitly rather than presenting it alongside the others as if equivalent.
-
-Two things partly compensate:
-
-**Trade spatial coverage for temporal resolution.** Fewer probes means fewer results per round, which means each round costs fewer credits, which means we can sample far more frequently. With nine probes at a one-minute interval we can pin down *when* a block starts and stops on Vodafone quite precisely. What we cannot do is map variation *across* Vodafone's network. Separating those two questions explicitly in the write-up resolves most of the problem.
-
-**Cross-check against OONI.** Their Vodafone data comes from volunteer devices - a completely different sampling method with different biases. Agreement between two independent methods is stronger evidence than either alone, and it costs nothing.
+A target unreachable from Spain *and* from the controls is simply down. A target unreachable from Spain only is a blocking candidate. Without the control, those two cases are indistinguishable.
 
 ---
 
 ## A known ground truth for validation
 
-OONI's charts use the IP **188.114.97.5** (Cloudflare) as a worked example: most Spanish ISPs block it shortly before kick-off and lift the block soon after the match.
+OONI's charts use the Cloudflare IP **188.114.97.5** as a worked example: most Spanish ISPs block it shortly before kick-off and lift the block soon after the match.
 
-That makes it a useful validation target - a case where we know roughly what the answer should look like, so we can check the pipeline produces it before trusting the pipeline on unknown IPs.
+That makes it a validation target - a case where we roughly know what the answer should look like, so we can confirm the pipeline produces it before trusting the pipeline on unknown IPs.
 
 ---
 
@@ -124,9 +131,7 @@ That makes it a useful validation target - a case where we know roughly what the
 python3 campaigns/probe-profile/probe_profile.py
 ```
 
-Outputs a per-ISP breakdown and a full CSV with the classification reason for every probe. Re-run it before designing any campaign: probe populations change, and a count from three months ago is not a count from today.
-
-Note that RIPE also publishes an official coverage page with a world map and top-ASN breakdown - worth checking before building anything custom, since it covers the general "where are the probes" question well. Our script exists for the specific question it doesn't answer: residential versus infrastructure, per target ISP, side by side.
+Outputs the per-ISP breakdown and a CSV with every probe and its classification. Note that RIPE also publishes an [official coverage page](https://atlas.ripe.net/statistics/coverage) with a world map and top-ASN breakdown - check that first for general "where are the probes" questions. Our script exists for the per-target-ISP breakdown it does not provide.
 
 ---
 
@@ -134,9 +139,9 @@ Note that RIPE also publishes an official coverage page with a world map and top
 
 - *Probe tags* (system tag categories - confirms no residential/datacentre tag) - <https://atlas.ripe.net/docs/getting-started/probe-tags.html>
 - *Listing probes* (API filters used) - <https://atlas.ripe.net/docs/apis/rest-api-manual/probes/listing-probes/>
-- *RIPE Atlas coverage statistics* (official map and ASN breakdown) - <https://atlas.ripe.net/statistics/coverage>
-- OONI, *Collateral Damage of IP-Based Blocking During LALIGA Football Streaming in Spain* (June 2026) - source for the ISP list, the TLS MitM observation on AS57269, and the 188.114.97.5 example - <https://ooni.org/post/2026-laliga-collateral/>
+- *RIPE Atlas coverage statistics* - <https://atlas.ripe.net/statistics/coverage>
+- OONI, *Collateral Damage of IP-Based Blocking During LALIGA Football Streaming in Spain* (June 2026) - the ISP list, the TLS MitM observation on AS57269, the control-vantage-point design, and the 188.114.97.5 example - <https://ooni.org/post/2026-laliga-collateral/>
 - CyberInsider coverage of the OONI report (confirms the report does not attribute responsibility for the TLS interception) - <https://cyberinsider.com/ooni-laliga-piracy-blocks-disrupted-over-500000-legitimate-sites/>
 - AS ownership cross-checked via RIPE WHOIS and Cloudflare Radar (AS57269 = DIGI Spain Telecom; AS15704 = Xtra Telecom / MásMóvil)
-- Bajpai et al., *Lessons Learned From Using the RIPE Atlas Platform for Measurement Research* (SIGCOMM CCR 2015) - the AS-distribution skew this page quantifies for Spain - <https://dl.acm.org/doi/10.1145/2805789.2805796>
-- Our own probe profiling run (`probe_profile_es.csv`) - the coverage figures above are empirical, not published by RIPE
+- Bajpai et al., *Lessons Learned From Using the RIPE Atlas Platform for Measurement Research* (SIGCOMM CCR 2015) - the AS-distribution skew - <https://dl.acm.org/doi/10.1145/2805789.2805796>
+- Our own probe profiling run (`probe_profile_es.csv`) - the coverage figures are empirical, not published by RIPE

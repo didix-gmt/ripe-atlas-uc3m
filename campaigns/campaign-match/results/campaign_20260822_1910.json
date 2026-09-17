@@ -1,0 +1,224 @@
+{
+  "kickoff_utc": "2026-08-22T19:10:58.733310+00:00",
+  "start_utc": "2026-08-22T19:10:58.733310+00:00",
+  "stop_utc": "2026-08-22T19:30:58.733310+00:00",
+  "interval_seconds": 300,
+  "probes": {
+    "1017079": {
+      "group": "Telefonica",
+      "asn": 3352,
+      "role": "target"
+    },
+    "1016720": {
+      "group": "Telefonica",
+      "asn": 3352,
+      "role": "target"
+    },
+    "1016692": {
+      "group": "Telefonica",
+      "asn": 3352,
+      "role": "target"
+    },
+    "1015581": {
+      "group": "Telefonica",
+      "asn": 3352,
+      "role": "target"
+    },
+    "1015573": {
+      "group": "Telefonica",
+      "asn": 3352,
+      "role": "target"
+    },
+    "1015515": {
+      "group": "Telefonica",
+      "asn": 3352,
+      "role": "target"
+    },
+    "1016516": {
+      "group": "DIGI",
+      "asn": 57269,
+      "role": "target"
+    },
+    "1016422": {
+      "group": "DIGI",
+      "asn": 57269,
+      "role": "target"
+    },
+    "1015934": {
+      "group": "DIGI",
+      "asn": 57269,
+      "role": "target"
+    },
+    "1015681": {
+      "group": "DIGI",
+      "asn": 57269,
+      "role": "target"
+    },
+    "1014886": {
+      "group": "DIGI",
+      "asn": 57269,
+      "role": "target"
+    },
+    "1014624": {
+      "group": "DIGI",
+      "asn": 57269,
+      "role": "target"
+    },
+    "1016654": {
+      "group": "Orange ES",
+      "asn": 12479,
+      "role": "target"
+    },
+    "1015994": {
+      "group": "Orange ES",
+      "asn": 12479,
+      "role": "target"
+    },
+    "1013122": {
+      "group": "Orange ES",
+      "asn": 12479,
+      "role": "target"
+    },
+    "1011324": {
+      "group": "Orange ES",
+      "asn": 12479,
+      "role": "target"
+    },
+    "1010344": {
+      "group": "Orange ES",
+      "asn": 12479,
+      "role": "target"
+    },
+    "1002549": {
+      "group": "Orange ES",
+      "asn": 12479,
+      "role": "target"
+    },
+    "1010186": {
+      "group": "MasMovil",
+      "asn": 15704,
+      "role": "target"
+    },
+    "1009571": {
+      "group": "MasMovil",
+      "asn": 15704,
+      "role": "target"
+    },
+    "1002938": {
+      "group": "MasMovil",
+      "asn": 15704,
+      "role": "target"
+    },
+    "1001603": {
+      "group": "MasMovil",
+      "asn": 15704,
+      "role": "target"
+    },
+    "65028": {
+      "group": "MasMovil",
+      "asn": 15704,
+      "role": "target"
+    },
+    "60629": {
+      "group": "MasMovil",
+      "asn": 15704,
+      "role": "target"
+    },
+    "1015656": {
+      "group": "Vodafone ES",
+      "asn": 12430,
+      "role": "target"
+    },
+    "1010138": {
+      "group": "Vodafone ES",
+      "asn": 12430,
+      "role": "target"
+    },
+    "64325": {
+      "group": "Vodafone ES",
+      "asn": 12430,
+      "role": "target"
+    },
+    "60135": {
+      "group": "Vodafone ES",
+      "asn": 12430,
+      "role": "target"
+    },
+    "21665": {
+      "group": "Vodafone ES",
+      "asn": 12430,
+      "role": "target"
+    },
+    "14782": {
+      "group": "Vodafone ES",
+      "asn": 12430,
+      "role": "target"
+    },
+    "11531": {
+      "group": "France",
+      "asn": 15557,
+      "role": "control"
+    },
+    "11491": {
+      "group": "France",
+      "asn": 33835,
+      "role": "control"
+    },
+    "11357": {
+      "group": "France",
+      "asn": 35540,
+      "role": "control"
+    },
+    "11268": {
+      "group": "France",
+      "asn": 12322,
+      "role": "control"
+    },
+    "4243": {
+      "group": "Germany",
+      "asn": 3320,
+      "role": "control"
+    },
+    "4180": {
+      "group": "Germany",
+      "asn": 3209,
+      "role": "control"
+    },
+    "4150": {
+      "group": "Germany",
+      "asn": 3209,
+      "role": "control"
+    },
+    "4135": {
+      "group": "Germany",
+      "asn": null,
+      "role": "control"
+    },
+    "1014766": {
+      "group": "Portugal",
+      "asn": 2860,
+      "role": "control"
+    },
+    "1014765": {
+      "group": "Portugal",
+      "asn": 2860,
+      "role": "control"
+    },
+    "1014762": {
+      "group": "Portugal",
+      "asn": 2860,
+      "role": "control"
+    },
+    "1014560": {
+      "group": "Portugal",
+      "asn": 12353,
+      "role": "control"
+    }
+  },
+  "measurements": [
+    {
+      "target": "188.114.97.5",
+      "msm_id": 203356204
+    }
+  ]
+}

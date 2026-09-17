@@ -1,0 +1,58 @@
+# Target IPs for the La Liga blocking campaign
+# One IP per line. Everything after '#' is ignored.
+#
+# ---------------------------------------------------------------------
+# STATUS: this list is a starting point, not a finished target set.
+# It needs to grow to ~20 addresses before the first real match.
+# ---------------------------------------------------------------------
+
+
+# === Known ground truth =============================================
+# Used by OONI as a worked example: blocked by most Spanish ISPs
+# shortly before kick-off, unblocked shortly after the match. If the
+# pipeline does not reproduce this signal, the pipeline is wrong —
+# validate against it before trusting anything else.
+
+188.114.97.5        # Cloudflare, OONI worked example
+
+
+# === Controls =======================================================
+# Expected NEVER to be blocked. If one of these goes unreachable from
+# Spain during a match, something is wrong with the measurement rather
+# than with the network — these are the canaries.
+
+1.1.1.1             # Cloudflare public resolver
+8.8.8.8             # Google public resolver
+
+
+# === To be added ====================================================
+# Roughly 17 more addresses, weighted toward Cloudflare since that is
+# where the collateral damage concentrates: OONI found 501,305 of the
+# 554,507 affected domains (90.4%) behind just 2,218 Cloudflare IPs.
+#
+# Where to find candidates:
+#
+# 1. The OONI report itself (https://ooni.org/post/2026-laliga-collateral/)
+#    Check whether the underlying measurement data is published — OONI
+#    normally releases raw measurements through its API and S3 bucket,
+#    which would give exact blocked IPs rather than aggregates.
+#
+# 2. OONI Explorer (https://explorer.ooni.org/)
+#    Filter by country=ES and the relevant date range; individual
+#    measurements show the endpoints tested and their outcome.
+#
+# 3. Reverse-derive from Cloudflare ranges
+#    Cloudflare publishes its IPv4 ranges at
+#    https://www.cloudflare.com/ips-v4 . Sampling addresses that host
+#    many domains gives plausible candidates, but this is a guess about
+#    what *might* be blocked, not evidence that it was. Label any
+#    address obtained this way as unconfirmed.
+#
+# 4. Post-hoc, from our own first campaign
+#    Once a first match has been measured, addresses that showed the
+#    block-and-release pattern become confirmed targets for later
+#    matches. The list should get better each matchday.
+#
+# Keep a note of provenance for each address added — "OONI-confirmed"
+# versus "sampled from Cloudflare range" is a meaningful distinction
+# when interpreting results.

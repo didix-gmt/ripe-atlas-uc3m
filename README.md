@@ -30,6 +30,10 @@ You, if you're joining the project and have never touched RIPE Atlas. It assumes
 
 ---
 
+## Reprendre le projet
+
+Si vous reprenez ce projet, commencez par **[HANDOVER.md](HANDOVER.md)** - état actuel, ce qui a été fait, ce qui ne l'a pas été, et une checklist de démarrage.
+
 ## Main sources
 
 - Official RIPE Atlas documentation - <https://atlas.ripe.net/docs/>

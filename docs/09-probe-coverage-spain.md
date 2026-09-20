@@ -128,7 +128,7 @@ That makes it a validation target - a case where we roughly know what the answer
 ## Reproducing this
 
 ```bash
-python3 campaigns/probe-profile/probe_profile.py
+python3 campaigns/probe_profile/probe_profile.py
 ```
 
 Outputs the per-ISP breakdown and a CSV with every probe and its classification. Note that RIPE also publishes an [official coverage page](https://atlas.ripe.net/statistics/coverage) with a world map and top-ASN breakdown - check that first for general "where are the probes" questions. Our script exists for the per-target-ISP breakdown it does not provide.

@@ -12,6 +12,17 @@ Design decisions and why:
     we need a time series anyway — the whole point is to see the block
     appear and disappear. Scheduled with explicit start/stop times.
 
+  * PING **AND** TLS, in the same request. Ping alone cannot tell
+    "blocked" from "drops ICMP as a matter of policy", and it is blind
+    to a block applied at TCP/443 only — which would be a silent false
+    negative, the worst failure mode for this study. Guide page 8
+    (pitfall 3) states this rule and its checklist asks for it
+    explicitly; an earlier version of this script launched ping only
+    and did not follow it. Both measurements are created in a single
+    API call so they share probes and timing. See MEASURE_PING /
+    MEASURE_TLS below — this is the expensive decision in the whole
+    campaign, so read the cost note there before changing it.
+
   * EQUAL n PER OPERATOR. The headline analysis is a comparison between
     ISPs. With 72 probes on Telefonica and 9 on Vodafone, a difference
     in detected blocking rate could just be a difference in sample size.
@@ -27,7 +38,7 @@ Design decisions and why:
   * RECENT PROBES ONLY. The API returns oldest probe IDs first, and old
     probes have an outdated TLS client that fails handshakes against
     modern servers for reasons unrelated to blocking. (See guide
-    page 8.)
+    page 8.) This matters more now that TLS is measured.
 
   * is_public=False. A public measurement reveals which IPs we suspect
     of being blocked before we have published anything.
@@ -60,6 +71,7 @@ import requests
 from dotenv import load_dotenv
 from ripe.atlas.cousteau import (
     Ping,
+    Sslcert,
     AtlasSource,
     AtlasCreateRequest,
 )
@@ -100,7 +112,50 @@ MATCH_MINUTES = 115       # 90 + half-time + stoppage, approximate
 
 INTERVAL_SECONDS = 300    # one round every 5 minutes
 PING_PACKETS = 3
+
+# Cost per result, from guide page 3 (official RIPE figures).
 CREDITS_PER_PING_RESULT = 3
+CREDITS_PER_SSLCERT_RESULT = 10
+
+# ── WHICH MEASUREMENTS TO RUN — the expensive decision ────────────────────────
+#
+# This is the single biggest lever on campaign cost, so decide it
+# deliberately rather than inheriting it.
+#
+#   ping only   3 credits per probe per round   blind to a TCP/443-only
+#                                               block, and cannot tell
+#                                               blocking from an ICMP
+#                                               drop policy
+#   TLS only   10 credits per probe per round   measures what a user
+#                                               actually experiences;
+#                                               classify_ssl_result in
+#                                               fetch_results.py already
+#                                               extracts three states
+#                                               (OK / TLS_FAIL /
+#                                               UNREACHABLE) from it
+#                                               alone; matches OONI's
+#                                               own methodology
+#   both       13 credits per probe per round   fullest diagnosis: a
+#                                               ping/TLS mismatch is
+#                                               informative in both
+#                                               directions (guide p.8)
+#
+# Order of magnitude, 42 probes over a 235-minute match window:
+#
+#   20 targets @ 5 min    ping 118k   TLS 395k   both 513k credits
+#   20 targets @ 10 min   ping  58k   TLS 193k   both 251k
+#   12 targets @ 10 min   ping  35k   TLS 116k   both 151k
+#
+# One probe earns roughly 21,600 credits/day (guide page 3), so "both"
+# at the defaults is about three weeks of a single probe's income for
+# ONE match. If the balance is tight, TLS-only at a 10-minute interval
+# with a shorter target list costs about what ping-only did while
+# actually measuring the right thing. The cost of a longer interval is
+# resolution: it blurs exactly *when* a block starts and stops, which
+# guide page 9 names as a reason the interval was short to begin with.
+#
+MEASURE_PING = True
+MEASURE_TLS = True
 
 # Tags that mark a probe as sitting behind additional filtering of its
 # own, which would confound an ISP-level measurement.
@@ -212,17 +267,44 @@ def load_targets(path):
 
 # ── Cost ──────────────────────────────────────────────────────────────────────
 
+def active_types():
+    """Which measurement types this run will create, in request order."""
+    types = []
+    if MEASURE_PING:
+        types.append("ping")
+    if MEASURE_TLS:
+        types.append("tls")
+    return types
+
+
+def credits_per_probe_round():
+    """Credits spent per probe, per round, across all active types."""
+    return ((CREDITS_PER_PING_RESULT if MEASURE_PING else 0)
+            + (CREDITS_PER_SSLCERT_RESULT if MEASURE_TLS else 0))
+
+
 def estimate_cost(n_targets, n_probes, duration_minutes):
     """
-    Credits = targets x probes x rounds x cost-per-result.
+    Credits = targets x probes x rounds x cost-per-result, summed over
+    every measurement type being created.
 
     Periodic measurements are billed per result delivered, with no
-    one-off surcharge. One measurement is created per target, each
-    sourced from the full probe set.
+    one-off surcharge. One measurement PER TYPE is created per target,
+    each sourced from the full probe set — so running both ping and TLS
+    doubles the number of results and multiplies the bill by 13/3
+    relative to ping alone. Getting this wrong understates the cost by
+    more than a factor of four, which is why the breakdown is printed.
+
+    Returns (total_credits, rounds, total_results, per_type_breakdown).
     """
     rounds = int(duration_minutes * 60 / INTERVAL_SECONDS)
-    results = n_targets * n_probes * rounds
-    return results * CREDITS_PER_PING_RESULT, rounds, results
+    result_sets = n_targets * n_probes * rounds   # results per type
+    unit = {"ping": CREDITS_PER_PING_RESULT, "tls": CREDITS_PER_SSLCERT_RESULT}
+
+    breakdown = {t: (result_sets, result_sets * unit[t]) for t in active_types()}
+    total_results = result_sets * len(breakdown)
+    total_credits = sum(c for _, c in breakdown.values())
+    return total_credits, rounds, total_results, breakdown
 
 
 def check_balance():
@@ -241,13 +323,44 @@ def check_balance():
 
 # ── Launch ────────────────────────────────────────────────────────────────────
 
+def build_measurements(target):
+    """
+    Build the measurement objects for one target, in a stable order.
+
+    Both go into a single AtlasCreateRequest so they share the probe set
+    and the window — that is what makes a ping/TLS comparison meaningful
+    rather than two unrelated observations (guide page 8, pitfall 3).
+    """
+    measurements = []
+    if MEASURE_PING:
+        measurements.append(Ping(
+            af=4,
+            target=target,
+            packets=PING_PACKETS,
+            interval=INTERVAL_SECONDS,
+            description=f"LaLiga blocking campaign (ping) - {target}",
+        ))
+    if MEASURE_TLS:
+        measurements.append(Sslcert(
+            af=4,
+            target=target,
+            port=443,
+            interval=INTERVAL_SECONDS,
+            description=f"LaLiga blocking campaign (TLS) - {target}",
+        ))
+    if not measurements:
+        raise SystemExit("MEASURE_PING and MEASURE_TLS are both False — "
+                         "nothing to measure.")
+    return measurements
+
+
 def launch(targets, probe_ids, start, stop):
     """
-    Create one periodic ping measurement per target IP.
+    Create the periodic measurements, one request per target IP.
 
-    One measurement per target rather than one overall, because RIPE
-    measurements have a single target each. All share the same probe
-    set and the same window, so the results line up.
+    One request per target rather than one overall, because a RIPE
+    measurement has a single target each. All share the same probe set
+    and the same window, so the results line up.
     """
     source = AtlasSource(
         type="probes",
@@ -255,18 +368,12 @@ def launch(targets, probe_ids, start, stop):
         requested=len(probe_ids),
     )
 
+    types = active_types()
     created = []
     for i, target in enumerate(targets, 1):
-        ping = Ping(
-            af=4,
-            target=target,
-            packets=PING_PACKETS,
-            interval=INTERVAL_SECONDS,
-            description=f"LaLiga blocking campaign - {target}",
-        )
         request = AtlasCreateRequest(
             key=API_KEY,
-            measurements=[ping],
+            measurements=build_measurements(target),
             sources=[source],
             start_time=start,
             stop_time=stop,
@@ -278,9 +385,24 @@ def launch(targets, probe_ids, start, stop):
             print(f"  ! {target}: {response}")
             continue
 
-        msm_id = response["measurements"][0]
-        created.append({"target": target, "msm_id": msm_id})
-        print(f"  [{i:>3}/{len(targets)}] {target:<18} -> msm {msm_id}")
+        ids = response["measurements"]
+        if len(ids) != len(types):
+            print(f"  ! {target}: expected {len(types)} measurement ids, got {ids}")
+
+        # The full list is always recorded, because it is the one thing
+        # guaranteed to be complete. The per-type labels assume the API
+        # returns ids in the order the measurements were requested —
+        # which held on every run so far (connectivity_test.py relies on
+        # the same assumption) but is not documented. A mislabel is
+        # recoverable: fetch_results.py reads each measurement's real
+        # type from the API rather than trusting these keys.
+        entry = {"target": target, "msm_ids": ids}
+        for t, msm_id in zip(types, ids):
+            entry[f"{t}_msm_id"] = msm_id
+        created.append(entry)
+
+        shown = "  ".join(f"{t}={m}" for t, m in zip(types, ids))
+        print(f"  [{i:>3}/{len(targets)}] {target:<18} -> {shown}")
         time.sleep(0.5)   # be gentle with the API
 
     return created
@@ -337,7 +459,8 @@ def main():
     if not probe_ids:
         raise SystemExit("No probes selected.")
 
-    cost, rounds, results = estimate_cost(len(targets), len(probe_ids), duration)
+    cost, rounds, results, breakdown = estimate_cost(
+        len(targets), len(probe_ids), duration)
 
     print("\n" + "=" * 70)
     print("CAMPAIGN PLAN" + ("  [TEST RUN]" if args.test else ""))
@@ -351,17 +474,32 @@ def main():
     print(f"Probes          : {len(probe_ids)} "
           f"({sum(1 for m in meta.values() if m['role']=='target')} target, "
           f"{sum(1 for m in meta.values() if m['role']=='control')} control)")
+    print(f"Measuring       : {' + '.join(active_types())}  "
+          f"({credits_per_probe_round()} credits per probe per round)")
     print(f"Results         : {results:,}")
+    for t, (n, c) in breakdown.items():
+        print(f"  {t:<12}  {n:>9,} results   {c:>10,} credits")
     print(f"Estimated cost  : {cost:,} credits")
+
+    if MEASURE_PING and not MEASURE_TLS:
+        print("\n!! Ping-only run. This cannot distinguish blocking from an ICMP")
+        print("   drop policy, and is blind to a block applied at TCP/443 only.")
+        print("   See guide page 8, pitfall 3. Set MEASURE_TLS = True unless you")
+        print("   have a specific reason not to.")
 
     balance = check_balance()
     if balance is not None:
         print(f"Current balance : {balance:,} credits")
         if cost > balance:
             print("\n!! Estimated cost exceeds the current balance.")
-            print("   Reduce targets, lengthen the interval, or wait for credits.")
+            print("   Reduce targets, lengthen the interval, or drop to TLS only")
+            print("   (MEASURE_PING = False) — see the cost note near the top.")
         else:
             print(f"Remaining after : {balance - cost:,} credits")
+    else:
+        print("Current balance : unavailable — the API key may lack the")
+        print("                  credits-read permission. Check it by hand at")
+        print("                  atlas.ripe.net before launching.")
 
     short = [k for k, v in counts.items() if k in TARGET_ISPS.values() and v < PROBES_PER_ISP]
     if short:
@@ -386,11 +524,14 @@ def main():
             "start_utc": start.isoformat(),
             "stop_utc": stop.isoformat(),
             "interval_seconds": INTERVAL_SECONDS,
+            "measured_types": active_types(),
             "probes": meta,
             "measurements": created,
         }, f, indent=2)
 
-    print(f"\n{len(created)}/{len(targets)} measurements scheduled.")
+    n_msm = sum(len(c["msm_ids"]) for c in created)
+    print(f"\n{len(created)}/{len(targets)} targets scheduled "
+          f"({n_msm} measurements).")
     print(f"Campaign manifest saved as {out}")
     print("Fetch results after the match with fetch_results.py using the IDs above.")
 

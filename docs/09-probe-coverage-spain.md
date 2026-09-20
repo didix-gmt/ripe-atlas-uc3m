@@ -117,11 +117,42 @@ A target unreachable from Spain *and* from the controls is simply down. A target
 
 ---
 
+## What the blocking actually hits
+
+The other half of the design question: having chosen where to measure *from*, what should we measure *towards*? OONI publishes the full list of affected addresses, so this is answerable from data rather than guesswork. Computed from their CSV (September 2026, 7,374 addresses across 33 ASNs):
+
+| Provider | AS | Affected addresses | Share |
+|---|---|---|---|
+| Amazon AWS | 16509 | 4,286 | 58.1% |
+| Cloudflare | 13335 | 2,215 | 30.0% |
+| Amazon AWS | 14618 | 811 | 11.0% |
+| *30 other ASNs* | - | 62 | 0.8% |
+
+Two observations follow, both relevant to target selection.
+
+**Two providers hold 99.2% of every affected address, and by address count Amazon is the larger half**, not Cloudflare.
+
+> ⚠️ This is not a correction of OONI, and must not be written up as one. OONI foregrounds Cloudflare because it counts affected *sites*: one Cloudflare anycast address fronts a very large number of unrelated sites, so blocking it does far more damage than blocking an AWS address serving few. Counting addresses and counting sites answer different questions - say which one you are counting.
+
+**The blocking is overwhelmingly range-level, not address-level.** Grouping the affected addresses by /24, **86% of them sit in a /24 that holds at least eight other affected addresses** — 88.8% of Amazon's and 82.4% of Cloudflare's. Whole ranges are being swept rather than individual addresses picked out, which makes the collateral damage a direct consequence of the mechanism rather than an unlucky side effect of it.
+
+Worth recording what is *absent*, since it was checked: Google (AS15169), Fastly (AS54113) and Akamai's AS16625 contribute no affected addresses at all. Akamai's AS20940 contributes 4 and Microsoft 2 — trace amounts in the tail, not categories of their own.
+
+`select_targets.py` samples across these strata deliberately **non**-proportionally, over-weighting Cloudflare and the small-provider tail. The reasoning, and the alternative, are documented at the top of that script; whichever choice a write-up rests on has to be stated, because per-stratum figures mean different things under each.
+
+```bash
+python3 campaigns/campaign-match/select_targets.py --verify
+```
+
+---
+
 ## A known ground truth for validation
 
 OONI's charts use the Cloudflare IP **188.114.97.5** as a worked example: most Spanish ISPs block it shortly before kick-off and lift the block soon after the match.
 
-That makes it a validation target - a case where we roughly know what the answer should look like, so we can confirm the pipeline produces it before trusting the pipeline on unknown IPs.
+That makes it a validation target - a case where we roughly know what the answer should look like, so we can confirm the pipeline produces it before trusting the pipeline on unknown IPs. `select_targets.py` pins it into every sample for that reason.
+
+Note that OONI established this with TLS measurements, not ping. A ping-only campaign might not reproduce it at all — see [page 8](08-pitfalls.md), pitfall 3.
 
 ---
 
@@ -141,7 +172,8 @@ Outputs the per-ISP breakdown and a CSV with every probe and its classification.
 - *Listing probes* (API filters used) - <https://atlas.ripe.net/docs/apis/rest-api-manual/probes/listing-probes/>
 - *RIPE Atlas coverage statistics* - <https://atlas.ripe.net/statistics/coverage>
 - OONI, *Collateral Damage of IP-Based Blocking During LALIGA Football Streaming in Spain* (June 2026) - the ISP list, the TLS MitM observation on AS57269, the control-vantage-point design, and the 188.114.97.5 example - <https://ooni.org/post/2026-laliga-collateral/>
+- OONI's published list of affected IP addresses - the source for the provider breakdown and the /24 concentration figures above, both computed by `select_targets.py` - <https://ooni.org/post/2026-laliga-collateral/data/20260629-all-affected-ips.csv>
 - CyberInsider coverage of the OONI report (confirms the report does not attribute responsibility for the TLS interception) - <https://cyberinsider.com/ooni-laliga-piracy-blocks-disrupted-over-500000-legitimate-sites/>
-- AS ownership cross-checked via RIPE WHOIS and Cloudflare Radar (AS57269 = DIGI Spain Telecom; AS15704 = Xtra Telecom / MásMóvil)
+- AS ownership cross-checked via RIPE WHOIS and Cloudflare Radar (AS57269 = DIGI Spain Telecom; AS15704 = Xtra Telecom / MásMóvil; AS16509 and AS14618 = Amazon; AS13335 = Cloudflare)
 - Bajpai et al., *Lessons Learned From Using the RIPE Atlas Platform for Measurement Research* (SIGCOMM CCR 2015) - the AS-distribution skew - <https://dl.acm.org/doi/10.1145/2805789.2805796>
 - Our own probe profiling run (`probe_profile_es.csv`) - the coverage figures are empirical, not published by RIPE

@@ -14,30 +14,75 @@ concentration, quotas - is derived from those two columns and nothing else.
 
 Why sample at all
 -----------------
-The published list holds roughly 7,400 addresses. A campaign measures every
-target from every probe at every interval, so cost scales linearly with the
-number of targets: measuring all of them is not affordable. What we want is a
-few dozen addresses that between them represent the *shape* of the blocking,
-rather than a random handful that all turn out to be Cloudflare edge IPs.
+The published list holds 7,374 addresses. A campaign measures every target from
+every probe at every interval, so cost scales linearly with the number of
+targets: measuring all of them is not affordable. What we want is a few dozen
+addresses that between them represent the *shape* of the blocking, rather than
+a random handful that all turn out to be the same thing.
+
+What the data actually looks like
+---------------------------------
+Measured on the published CSV (September 2026):
+
+    total                 7,374 addresses across 33 ASNs
+    Amazon AWS            5,097   69.1%   (AS16509 4,286 + AS14618 811)
+    Cloudflare            2,215   30.0%   (AS13335)
+    everything else          62    0.8%   (30 ASNs, the largest holding 6)
+
+So this is a two-provider story: AWS and Cloudflare together account for 99.2%
+of all affected addresses, and by address count **AWS is the larger half**.
+
+That is worth stating carefully, because it does not contradict OONI's
+write-up, which foregrounds Cloudflare. The two measure different things. By
+*address* count AWS dominates. By *sites affected* Cloudflare dominates, since
+a single Cloudflare anycast address fronts a very large number of unrelated
+sites while an AWS address usually fronts few. Both statements are true; a
+write-up has to say which one it is making.
+
+Two things that are NOT in the data, despite being worth checking: Google
+(AS15169), Fastly (AS54113) and Akamai's AS16625 contribute zero affected
+addresses. Akamai's AS20940 contributes 4 and Microsoft 2 - trace amounts that
+sit in the tail, not a category of their own.
 
 Stratification
 --------------
 Five strata, all computed from the CSV itself:
 
-  cloudflare_dense    AS13335, sitting in a /24 that holds many other affected
-                      IPs. Range-level sweeps - the bulk of the collateral
-                      damage OONI documented.
-  cloudflare_sparse   AS13335, in a /24 with few affected IPs. Individually
-                      caught Cloudflare addresses rather than swept ranges.
-  major_cdn           AWS / Akamai / Fastly / Google / Microsoft. Shared
-                      hosting outside Cloudflare.
-  high_concentration  Any other AS among the top contributors by affected-IP
-                      count - smaller hosts that took a disproportionate hit.
-  long_tail           Everything else: one-off addresses at small providers.
+  cloudflare_dense   AS13335, in a /24 holding many other affected addresses.
+  cloudflare_sparse  AS13335, in a /24 holding few. Individually caught
+                     addresses rather than swept ranges.
+  aws_dense          AS16509/AS14618, same /24 test.
+  aws_sparse         AS16509/AS14618, sparse.
+  other_providers    The 0.8% tail - 30 small ASNs.
 
-`--verify` prints the resulting split without writing anything, so the two
-tunables below (DENSE_24_THRESHOLD, TOP_ASN_COUNT) can be sanity-checked
-against the real data before committing to a target list.
+The dense/sparse split is applied to both big providers for the same reason:
+it distinguishes range-level sweeps from individually targeted addresses, which
+is a question about *how* the blocking is implemented and therefore about how
+much collateral damage it can do. Run `--verify` to see how each provider
+actually splits - that result is itself a finding worth recording.
+
+THE SAMPLE IS DELIBERATELY NOT PROPORTIONAL - read this before quoting any
+per-stratum figure
+-----------------------------------------------------------------------
+Proportional to address count, a sample would be ~69% AWS, ~30% Cloudflare,
+~1% everything else. The quotas below give AWS 50%, Cloudflare 40% and the
+tail 10%. That is a choice, not an oversight:
+
+  - Cloudflare is over-weighted (40% of the sample, 30% of the addresses)
+    because each of its anycast addresses carries more collateral damage than
+    an AWS address does. The research question is about damage to legitimate
+    sites, so the sample leans toward where that damage concentrates.
+  - `other_providers` is heavily over-weighted (10% of the sample, 0.8% of the
+    addresses) for a different reason: with 62 addresses in total it can never
+    support a rate, but including two or three of them is what tells you
+    whether the blocking reaches beyond the two big platforms at all. Treat
+    findings there as presence/absence, never as a percentage.
+
+If a future analysis needs address-proportional representativeness instead -
+to state what fraction of *addresses* were blocked, say - set QUOTAS to the
+shares above and say so in the write-up. Either choice is defensible; leaving
+it unstated is not. Worth putting to Pablo before the first real campaign is
+analysed.
 
 PROVENANCE - read this before assuming reproducibility
 ------------------------------------------------------
@@ -85,13 +130,16 @@ OONI_CSV_URL = (
 # the dice land. See docs/09-probe-coverage-spain.md.
 VALIDATION_IP = "188.114.97.5"
 
+# The two providers that between them hold 99.2% of the affected addresses.
 CLOUDFLARE_ASN = 13335
+AWS_ASNS = {16509, 14618}
 
-# Only ASNs cross-checked against RIPE WHOIS / bgp.he.net are named here. The
-# map is deliberately short: every other AS is categorised from the data, by
-# how many affected IPs it contributes, so an unnamed AS is never mislabelled.
-# Look any unfamiliar ASN up on bgp.he.net before quoting a name in a write-up.
-MAJOR_CDN_ASNS = {
+# Names for readable output only - they play no part in classification. Each
+# was cross-checked against RIPE WHOIS / bgp.he.net. Google (15169), Fastly
+# (54113) and Akamai's 16625 are listed because they were checked and found to
+# contribute zero affected addresses; that absence is itself worth recording.
+KNOWN_ASNS = {
+    13335: "Cloudflare",
     16509: "Amazon AWS",
     14618: "Amazon AWS",
     20940: "Akamai",
@@ -101,20 +149,23 @@ MAJOR_CDN_ASNS = {
     8075: "Microsoft",
 }
 
-# A /24 holding at least this many affected IPs counts as a swept range rather
-# than an individually caught address. Tunable - run --verify after changing.
+# A /24 holding at least this many affected addresses counts as a swept range
+# rather than an individually caught address. Tunable - run --verify after
+# changing it. On the real data this puts 82% of Cloudflare's addresses in the
+# dense bucket, matching OONI's description of range-level sweeps.
 DENSE_24_THRESHOLD = 8
 
-# How many non-CDN ASNs (by affected-IP count) count as "high concentration".
+# Reporting only: how many tail ASNs --verify lists. No effect on sampling.
 TOP_ASN_COUNT = 10
 
 # Share of the sample given to each stratum. Must sum to 1.0.
+# Deliberately not proportional to address counts - see the docstring.
 QUOTAS = [
-    ("cloudflare_dense", 0.30),
-    ("cloudflare_sparse", 0.25),
-    ("major_cdn", 0.15),
-    ("high_concentration", 0.15),
-    ("long_tail", 0.15),
+    ("cloudflare_dense", 0.25),
+    ("cloudflare_sparse", 0.15),
+    ("aws_dense", 0.30),
+    ("aws_sparse", 0.20),
+    ("other_providers", 0.10),
 ]
 
 # Fixed so the same --count gives the same list on every run of THIS version.
@@ -123,10 +174,15 @@ SEED = 42
 STRATUM_NOTES = {
     "cloudflare_dense": "Cloudflare, swept /24 range",
     "cloudflare_sparse": "Cloudflare, isolated address",
-    "major_cdn": "major CDN / cloud host",
-    "high_concentration": "high-impact non-CDN AS",
-    "long_tail": "small provider, one-off",
+    "aws_dense": "Amazon AWS, swept /24 range",
+    "aws_sparse": "Amazon AWS, isolated address",
+    "other_providers": "small provider - presence check only, never a rate",
 }
+
+
+def asn_label(asn):
+    name = KNOWN_ASNS.get(asn)
+    return f"AS{asn}" + (f" {name}" if name else "")
 
 
 # --------------------------------------------------------------------------
@@ -135,7 +191,7 @@ STRATUM_NOTES = {
 
 
 def load_rows(csv_path=None, url=OONI_CSV_URL, timeout=30):
-    """Return [(ip, asn), ...] from a local CSV or the published OONI file."""
+    """Return ([(ip, asn), ...], origin) from a local CSV or the OONI file."""
     if csv_path:
         with open(csv_path, "r", encoding="utf-8") as fh:
             text = fh.read()
@@ -168,7 +224,7 @@ def load_rows(csv_path=None, url=OONI_CSV_URL, timeout=30):
         try:
             asn = int(asn_text)
         except ValueError:
-            asn = 0  # unknown / unparseable - falls into long_tail
+            asn = 0  # unknown / unparseable - falls into other_providers
         rows.append((ip, asn))
 
     if not rows:
@@ -192,27 +248,26 @@ def build_strata(rows):
     per_24 = Counter(slash24(ip) for ip, _ in rows)
     per_asn = Counter(asn for _, asn in rows)
 
-    # Top non-CDN ASNs by affected-IP count.
-    excluded = set(MAJOR_CDN_ASNS) | {CLOUDFLARE_ASN, 0}
-    ranked = [(asn, n) for asn, n in per_asn.most_common() if asn not in excluded]
-    high_conc_asns = {asn for asn, _ in ranked[:TOP_ASN_COUNT]}
-
     buckets = defaultdict(list)
     for ip, asn in rows:
+        dense = per_24[slash24(ip)] >= DENSE_24_THRESHOLD
         if asn == CLOUDFLARE_ASN:
-            dense = per_24[slash24(ip)] >= DENSE_24_THRESHOLD
             buckets["cloudflare_dense" if dense else "cloudflare_sparse"].append((ip, asn))
-        elif asn in MAJOR_CDN_ASNS:
-            buckets["major_cdn"].append((ip, asn))
-        elif asn in high_conc_asns:
-            buckets["high_concentration"].append((ip, asn))
+        elif asn in AWS_ASNS:
+            buckets["aws_dense" if dense else "aws_sparse"].append((ip, asn))
         else:
-            buckets["long_tail"].append((ip, asn))
+            buckets["other_providers"].append((ip, asn))
+
+    big = AWS_ASNS | {CLOUDFLARE_ASN}
+    tail = [(asn, n) for asn, n in per_asn.most_common() if asn not in big]
 
     stats = {
         "total": len(rows),
         "distinct_asns": len(per_asn),
-        "high_conc_asns": ranked[:TOP_ASN_COUNT],
+        "tail_asns": tail,
+        "cloudflare": per_asn[CLOUDFLARE_ASN],
+        "aws": sum(per_asn[a] for a in AWS_ASNS),
+        "absent_checked": [a for a in (15169, 54113, 16625) if per_asn[a] == 0],
     }
     return buckets, stats
 
@@ -223,8 +278,10 @@ def allocate(count, buckets):
     for name, share in QUOTAS:
         alloc[name] = min(int(count * share), len(buckets.get(name, [])))
 
-    # Hand out whatever rounding left over, largest stratum first, never
-    # asking a stratum for more IPs than it actually holds.
+    # Hand out whatever rounding left over, largest stratum first, never asking
+    # a stratum for more addresses than it actually holds. This is also what
+    # keeps the script correct if a stratum turns out much smaller than its
+    # quota assumes - the shortfall moves to the strata that can absorb it.
     leftover = count - sum(alloc.values())
     order = sorted(QUOTAS, key=lambda q: q[1], reverse=True)
     while leftover > 0:
@@ -265,7 +322,13 @@ def sample_targets(buckets, count, seed=SEED):
                     chosen[i] = (VALIDATION_IP, CLOUDFLARE_ASN, home)
                     break
             else:
-                chosen.append((VALIDATION_IP, CLOUDFLARE_ASN, home))
+                # No pick from the validation IP's own stratum to swap out. Take
+                # the place of another pick rather than growing past `count`, so
+                # the file never holds more addresses than were asked for.
+                if chosen and len(chosen) >= count:
+                    chosen[-1] = (VALIDATION_IP, CLOUDFLARE_ASN, home)
+                else:
+                    chosen.append((VALIDATION_IP, CLOUDFLARE_ASN, home))
         else:
             print(
                 f"  ! {VALIDATION_IP} is not in this CSV - skipping the pin. "
@@ -286,8 +349,8 @@ def sample_targets(buckets, count, seed=SEED):
 def write_targets(path, chosen, origin, stats):
     """Write targets.txt.
 
-    Annotations are full-line comments above each block rather than inline,
-    so the file parses under any reasonable reader - including one that only
+    Annotations are full-line comments above each block rather than inline, so
+    the file parses under any reasonable reader - including one that only
     strips lines starting with '#'.
     """
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
@@ -295,8 +358,12 @@ def write_targets(path, chosen, origin, stats):
         "# Target IPs for a LALIGA match campaign.",
         f"# Generated {now} by select_targets.py",
         f"# Source: {origin}",
-        f"# Sampled {len(chosen)} of {stats['total']} affected IPs "
+        f"# Sampled {len(chosen)} of {stats['total']} affected addresses "
         f"across {stats['distinct_asns']} ASNs.",
+        "#",
+        "# NOT proportional to the source distribution - Cloudflare and the",
+        "# small-provider tail are deliberately over-weighted. See the header",
+        "# of select_targets.py before quoting any per-stratum figure.",
         "#",
         "# One IP per line. Lines starting with '#' are comments.",
         "",
@@ -308,8 +375,7 @@ def write_targets(path, chosen, origin, stats):
             current = stratum
             n = sum(1 for _, _, s in chosen if s == stratum)
             lines.append(f"# --- {stratum} ({n}) - {STRATUM_NOTES[stratum]}")
-        name = MAJOR_CDN_ASNS.get(asn) or ("Cloudflare" if asn == CLOUDFLARE_ASN else None)
-        label = f"AS{asn}" + (f" {name}" if name else "")
+        label = asn_label(asn)
         if ip == VALIDATION_IP:
             label += "  <- OONI worked example, validation ground truth"
         lines.append(f"{ip}  # {label}")
@@ -320,8 +386,17 @@ def write_targets(path, chosen, origin, stats):
 
 
 def print_report(buckets, stats, alloc=None):
-    print(f"  Affected IPs in source : {stats['total']:,}")
-    print(f"  Distinct ASNs          : {stats['distinct_asns']:,}")
+    tot = stats["total"] or 1
+    other = tot - stats["cloudflare"] - stats["aws"]
+    print(f"  Affected addresses : {tot:,}")
+    print(f"  Distinct ASNs      : {stats['distinct_asns']:,}")
+    print()
+    print(f"  By provider:")
+    print(f"    Amazon AWS       {stats['aws']:>7,}  {stats['aws'] / tot:>6.1%}")
+    print(f"    Cloudflare       {stats['cloudflare']:>7,}  {stats['cloudflare'] / tot:>6.1%}")
+    print(f"    everything else  {other:>7,}  {other / tot:>6.1%}")
+    print(f"    -> the two big providers hold "
+          f"{(stats['aws'] + stats['cloudflare']) / tot:.1%} of all addresses")
     print()
     print(f"  {'stratum':<20} {'available':>10} {'sampled':>9}")
     print(f"  {'-' * 20} {'-' * 10} {'-' * 9}")
@@ -329,11 +404,13 @@ def print_report(buckets, stats, alloc=None):
         got = alloc.get(name, 0) if alloc else 0
         print(f"  {name:<20} {len(buckets.get(name, [])):>10,} {got:>9}")
     print()
-    print(f"  Top non-CDN ASNs by affected-IP count (the "
-          f"'high_concentration' stratum, TOP_ASN_COUNT={TOP_ASN_COUNT}):")
-    for asn, n in stats["high_conc_asns"]:
-        print(f"    AS{asn:<8} {n:>6,} IPs")
-    print("    (names not resolved here on purpose - look them up on bgp.he.net)")
+    print(f"  Largest {TOP_ASN_COUNT} ASNs outside AWS/Cloudflare "
+          f"(all in 'other_providers'):")
+    for asn, n in stats["tail_asns"][:TOP_ASN_COUNT]:
+        print(f"    {asn_label(asn):<22} {n:>5}")
+    if stats["absent_checked"]:
+        names = ", ".join(asn_label(a) for a in stats["absent_checked"])
+        print(f"  Checked and absent from this data: {names}")
 
 
 # --------------------------------------------------------------------------
@@ -354,7 +431,7 @@ def main():
     ap.add_argument("--seed", type=int, default=SEED,
                     help=f"sampling seed (default: {SEED})")
     ap.add_argument("--verify", action="store_true",
-                    help="show the stratum breakdown and exit without writing")
+                    help="show the breakdown and exit without writing")
     args = ap.parse_args()
 
     print("Loading OONI affected-IP list...")
@@ -380,7 +457,7 @@ def main():
     print_report(buckets, stats, alloc)
 
     if len(chosen) < args.count:
-        print(f"  ! Only {len(chosen)} IPs available, asked for {args.count}.")
+        print(f"\n  ! Only {len(chosen)} addresses available, asked for {args.count}.")
 
     write_targets(args.out, chosen, origin, stats)
     print()

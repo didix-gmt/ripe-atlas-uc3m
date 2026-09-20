@@ -44,6 +44,23 @@ Two things that are NOT in the data, despite being worth checking: Google
 addresses. Akamai's AS20940 contributes 4 and Microsoft 2 - trace amounts that
 sit in the tail, not a category of their own.
 
+Canary targets
+--------------
+Two addresses go into every target list that are NOT from OONI's data and are
+NOT sampled: `1.1.1.1` and `8.8.8.8`, the Cloudflare and Google public
+resolvers. They are expected never to be blocked. If one of them goes
+unreachable from Spain during a match, the measurement is broken rather than
+the network — they are there to fail loudly when something is wrong with our
+own pipeline.
+
+This is a different job from the out-of-country control *probes* in
+`campaign_match.py`. Those answer "is this target up at all?". The canaries
+answer "is our measurement working at all from inside Spain?". Both are
+needed: without canaries, a measurement-side failure reads as blocking.
+
+They cost credits like any other target, which is why there are two and not
+ten. `--no-canaries` omits them.
+
 Stratification
 --------------
 Five strata, all computed from the CSV itself:
@@ -70,8 +87,13 @@ tail 10%. That is a choice, not an oversight:
 
   - Cloudflare is over-weighted (40% of the sample, 30% of the addresses)
     because each of its anycast addresses carries more collateral damage than
-    an AWS address does. The research question is about damage to legitimate
-    sites, so the sample leans toward where that damage concentrates.
+    an AWS address does. OONI puts a number on this: **501,305 of the 554,507
+    affected domains — 90.4% — sat behind just 2,218 Cloudflare addresses.**
+    So 30% of the addresses account for roughly 90% of the domain-level
+    damage. The research question is about damage to legitimate sites, so the
+    sample leans toward where that damage concentrates. Note that a *purely*
+    impact-weighted design would go much further than 40%; this is a middle
+    position that still characterises the address-dominant provider.
   - `other_providers` is heavily over-weighted (10% of the sample, 0.8% of the
     addresses) for a different reason: with 62 addresses in total it can never
     support a rate, but including two or three of them is what tells you
@@ -133,6 +155,14 @@ VALIDATION_IP = "188.114.97.5"
 # The two providers that between them hold 99.2% of the affected addresses.
 CLOUDFLARE_ASN = 13335
 AWS_ASNS = {16509, 14618}
+
+# Addresses expected NEVER to be blocked, written into every list. Not sampled,
+# not from OONI's data. If one of these goes unreachable from Spain during a
+# match, the fault is ours, not the network's. See the docstring.
+CANARY_TARGETS = {
+    "1.1.1.1": "Cloudflare public resolver - canary, must never be blocked",
+    "8.8.8.8": "Google public resolver - canary, must never be blocked",
+}
 
 # Names for readable output only - they play no part in classification. Each
 # was cross-checked against RIPE WHOIS / bgp.he.net. Google (15169), Fastly
@@ -346,7 +376,7 @@ def sample_targets(buckets, count, seed=SEED):
 # --------------------------------------------------------------------------
 
 
-def write_targets(path, chosen, origin, stats):
+def write_targets(path, chosen, origin, stats, canaries=True):
     """Write targets.txt.
 
     Annotations are full-line comments above each block rather than inline, so
@@ -354,21 +384,40 @@ def write_targets(path, chosen, origin, stats):
     strips lines starting with '#'.
     """
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    n_canary = len(CANARY_TARGETS) if canaries else 0
     lines = [
         "# Target IPs for a LALIGA match campaign.",
         f"# Generated {now} by select_targets.py",
         f"# Source: {origin}",
-        f"# Sampled {len(chosen)} of {stats['total']} affected addresses "
-        f"across {stats['distinct_asns']} ASNs.",
+        f"# {len(chosen)} addresses sampled from {stats['total']} affected "
+        f"across {stats['distinct_asns']} ASNs"
+        + (f", plus {n_canary} canaries." if n_canary else "."),
         "#",
-        "# NOT proportional to the source distribution - Cloudflare and the",
-        "# small-provider tail are deliberately over-weighted. See the header",
-        "# of select_targets.py before quoting any per-stratum figure.",
+        "# The sample is NOT proportional to the source distribution -",
+        "# Cloudflare and the small-provider tail are deliberately",
+        "# over-weighted. Read the header of select_targets.py before quoting",
+        "# any per-stratum figure.",
+        "#",
+        f"# Cost scales with every address below, canaries included:",
+        f"# {len(chosen) + n_canary} targets is the number the cost estimate uses.",
         "#",
         "# One IP per line. Lines starting with '#' are comments.",
         "",
     ]
 
+    if canaries:
+        lines += [
+            "# === Canaries ======================================================",
+            "# Expected NEVER to be blocked, and not part of the OONI sample. If",
+            "# one of these goes unreachable from Spain during a match, the",
+            "# measurement is broken rather than the network. They are here to",
+            "# fail loudly when the fault is ours.",
+        ]
+        for ip, note in CANARY_TARGETS.items():
+            lines.append(f"{ip}  # {note}")
+        lines.append("")
+
+    lines.append("# === Sampled from OONI's affected-address list =====================")
     current = None
     for ip, asn, stratum in chosen:
         if stratum != current:
@@ -432,6 +481,9 @@ def main():
                     help=f"sampling seed (default: {SEED})")
     ap.add_argument("--verify", action="store_true",
                     help="show the breakdown and exit without writing")
+    ap.add_argument("--no-canaries", action="store_true",
+                    help="omit the never-blocked canary addresses "
+                         f"({', '.join(CANARY_TARGETS)})")
     args = ap.parse_args()
 
     print("Loading OONI affected-IP list...")
@@ -459,10 +511,16 @@ def main():
     if len(chosen) < args.count:
         print(f"\n  ! Only {len(chosen)} addresses available, asked for {args.count}.")
 
-    write_targets(args.out, chosen, origin, stats)
+    canaries = not args.no_canaries
+    write_targets(args.out, chosen, origin, stats, canaries=canaries)
+    n_canary = len(CANARY_TARGETS) if canaries else 0
+    total = len(chosen) + n_canary
     print()
-    print(f"  Wrote {len(chosen)} targets to {args.out}")
+    print(f"  Wrote {args.out}: {len(chosen)} sampled"
+          + (f" + {n_canary} canaries" if n_canary else "")
+          + f" = {total} targets")
     print(f"  Seed {args.seed} - same seed and count gives the same list.")
+    print(f"  Cost scales with all {total} of them, not just the sampled ones.")
     return 0
 
 

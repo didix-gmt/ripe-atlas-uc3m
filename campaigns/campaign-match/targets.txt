@@ -1,14 +1,27 @@
 # Target IPs for a LALIGA match campaign.
-# Generated 2026-09-20 17:44 UTC by select_targets.py
+# Generated 2026-09-21 13:18 UTC by select_targets.py
 # Source: https://ooni.org/post/2026-laliga-collateral/data/20260629-all-affected-ips.csv
-# Sampled 20 of 7374 affected addresses across 33 ASNs.
+# 20 addresses sampled from 7374 affected across 33 ASNs, plus 2 canaries.
 #
-# NOT proportional to the source distribution - Cloudflare and the
-# small-provider tail are deliberately over-weighted. See the header
-# of select_targets.py before quoting any per-stratum figure.
+# The sample is NOT proportional to the source distribution -
+# Cloudflare and the small-provider tail are deliberately
+# over-weighted. Read the header of select_targets.py before quoting
+# any per-stratum figure.
+#
+# Cost scales with every address below, canaries included:
+# 22 targets is the number the cost estimate uses.
 #
 # One IP per line. Lines starting with '#' are comments.
 
+# === Canaries ======================================================
+# Expected NEVER to be blocked, and not part of the OONI sample. If
+# one of these goes unreachable from Spain during a match, the
+# measurement is broken rather than the network. They are here to
+# fail loudly when the fault is ours.
+1.1.1.1  # Cloudflare public resolver - canary, must never be blocked
+8.8.8.8  # Google public resolver - canary, must never be blocked
+
+# === Sampled from OONI's affected-address list =====================
 # --- cloudflare_dense (5) - Cloudflare, swept /24 range
 104.21.13.44  # AS13335 Cloudflare
 104.21.3.218  # AS13335 Cloudflare
